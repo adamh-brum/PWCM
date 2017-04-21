@@ -28,16 +28,17 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
   $scope.cards = [];
  
   $scope.addCard = function(content, name) {
+      var cardId = Math.random();
+      content = "Hey there " + cardId;
+      name = cardId;
       var newCard = {htmlContent: content, title: name};
-      newCard.id = Math.random();
+      newCard.id = cardId;
       $scope.cards.unshift(angular.extend({}, newCard));
   };
- 
-  $scope.addCards(1);
- 
-  $scope.cardSwiped = function(index) {
-    $scope.addCard("<ul><li>This app is good for news</li><li>Any content can be displayed</li></ul>", "Hi From Adam");
-  };
+
+  $scope.addCard("", "");
+  $scope.addCard("", "");
+  $scope.addCard("", "");
  
   $scope.cardDestroyed = function(index) {
     $scope.cards.splice(index, 1);

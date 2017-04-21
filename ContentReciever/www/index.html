@@ -40,10 +40,12 @@
           <h1 class="title">Content Reciever</h1>
         </ion-header-bar>
 
+        <!--Before I forget... shift + { creates {}... so it automatically creates a close. (VS Code) Super helpful with Angular-->
         <ion-content class="has-header">
-          <div class="card">
+          <div class="card" ng-repeat="card in cards">
             <div class="item item-text-wrap">
-              This is a v1 Card
+              <h1>{{card.title}}</h1>
+              {{card.htmlContent}}
             </div>
           </div>
         </ion-content>
