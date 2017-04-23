@@ -1,5 +1,3 @@
-// Ionic Starter App
-
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
@@ -25,22 +23,59 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
 })
 
 .controller('CardsCtrl', function($scope, $http, $ionicSwipeCardDelegate) {
-
   $scope.cards = [];
- 
-  $scope.addCard = function(content, name) {
-      var cardId = Math.random();
-      content = "<h3>" + cardId + "</h3>";
-      name = cardId;
-      var newCard = {htmlContent: content, title: name};
-      newCard.id = cardId;
-      $scope.cards.unshift(angular.extend({}, newCard));
-  };
 
-  $scope.addCard("", "");
-  $scope.addCard("", "");
-  $scope.addCard("", "");
- 
+  $scope.getSavedCards = function(){
+    if(typeof(Storage) != "undefined") {
+        var cardsString = localStorage.getItem("cards");
+        if(cardsString === null){
+          var cards = [];
+        }
+        else{
+          var cards = JSON.parse(cardsString);
+        }
+
+        return cards;
+    }
+
+    return null;
+  }
+
+  $scope.loadSavedCards = function(){
+    // Retrieve the saved cards from device
+    var cards = $scope.getSavedCards();
+    for(cardIndex in cards){
+      $scope.displayCard(cards[cardIndex]);
+    }
+  }
+
+  $scope.saveCard = function(card){
+    // Save the card
+    if(typeof(Storage) != "undefined") {
+        var cards = $scope.getSavedCards();
+        cards.unshift(angular.extend({}, card));
+        localStorage.setItem("cards", JSON.stringify(cards));
+    } else {
+        alert("Sorry, your browser does not support Web Storage...");
+    }
+  }
+
+  $scope.getCardFromServer = function(beaconId){
+  }
+
+  $scope.displayCard = function(card){
+      $scope.cards.unshift(angular.extend({}, card));
+  }
+
+  $scope.addStubData = function(content, name){
+      var newCard = {id: Math.random(), htmlContent: content, title: name};
+      $scope.displayCard(newCard);
+      $scope.saveCard(newCard);
+  }
+
+  //$scope.addStubData("<h3>Some ideas for your stand up!</h3><ul><li>1: Stand up</li><li>2: Use a ball!</li><li>3: Dance & Sing</li></ul>", "Some more save data");
+  $scope.loadSavedCards();
+
   $scope.cardDestroyed = function(index) {
     $scope.cards.splice(index, 1);
   };

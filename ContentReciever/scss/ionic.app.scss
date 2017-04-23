@@ -22,7 +22,8 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 @import "www/lib/ionic/scss/ionic";
 
 .card {
-    height: 600px;
+    // Force the card height up
+    height: 600px !important;
 }
 
 // // Custom SASS
