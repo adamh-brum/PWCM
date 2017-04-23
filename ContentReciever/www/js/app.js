@@ -25,11 +25,12 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
 })
 
 .controller('CardsCtrl', function($scope, $http, $ionicSwipeCardDelegate) {
+
   $scope.cards = [];
  
   $scope.addCard = function(content, name) {
       var cardId = Math.random();
-      content = "Hey there " + cardId;
+      content = "<h3>" + cardId + "</h3>";
       name = cardId;
       var newCard = {htmlContent: content, title: name};
       newCard.id = cardId;

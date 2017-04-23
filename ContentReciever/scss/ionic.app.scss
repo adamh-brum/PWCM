@@ -21,6 +21,10 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
+.card {
+    height: 600px;
+}
+
 // // Custom SASS
 // .pane {
 //   background-color: #333;

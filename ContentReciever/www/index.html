@@ -45,13 +45,13 @@
           <div class="card" ng-repeat="card in cards">
             <div class="item item-text-wrap">
               <h1>{{card.title}}</h1>
-              {{card.htmlContent}}
+               <div ng-bind-html="card.htmlContent"></div>
             </div>
           </div>
         </ion-content>
 
         <ion-footer-bar>
-          <p>Copyright Capgemini 2017</p>
+          <p>Copyright 2017</p>
         </ion-footer-bar>
     </body>
   </html>
