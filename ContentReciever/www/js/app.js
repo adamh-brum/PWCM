@@ -61,6 +61,13 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
   }
 
   $scope.getCardFromServer = function(beaconId){
+    beaconId = "1";
+    var url = "http://localhost:5000/api/Content?locationId=" + beaconId;
+    $.get({
+      url: url,
+      success: function(response) {
+      }
+    })
   }
 
   $scope.displayCard = function(card){
@@ -73,8 +80,10 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
       $scope.saveCard(newCard);
   }
 
+  $scope.getCardFromServer("1");
   //$scope.addStubData("<h3>Some ideas for your stand up!</h3><ul><li>1: Stand up</li><li>2: Use a ball!</li><li>3: Dance & Sing</li></ul>", "Some more save data");
   $scope.loadSavedCards();
+
 
   $scope.cardDestroyed = function(index) {
     $scope.cards.splice(index, 1);
