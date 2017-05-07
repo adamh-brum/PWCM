@@ -63,11 +63,12 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
   $scope.getCardFromServer = function(beaconId){
     beaconId = "1";
     var url = "http://localhost:5000/api/Content?locationId=" + beaconId;
-    $.get({
-      url: url,
-      success: function(response) {
-      }
-    })
+    $http.get(url).success( function(response) {
+      response.forEach(function(element) {
+        var newCard = {id: Math.random(), htmlContent: element.content, title: element.contentShortDescription};
+        $scope.displayCard(newCard);
+      }, this);
+    });
   }
 
   $scope.displayCard = function(card){
