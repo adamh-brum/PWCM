@@ -1,42 +1,27 @@
-// import { IBeacon } from '@ionic-native/ibeacon';
-// import {Component} from '@angular/core';
-// import {Page, NavController, Alert} from 'ionic-angular';
+var BeaconLogic = class BeaconLogic {
+    constructor(locationManager) {
+        this.locationManager = locationManager;
+    }
 
+    /**
+     * Function that creates a BeaconRegion data transfer object.
+     * uuid = guid 00000000-0000-0000-0000-000000000000
+     * identifier = string
+     * 
+     * @throws Error if the BeaconRegion parameters are not valid.
+     */
+    createBeaconRegion(uuid, identifier) {
+        return this.createBeaconRegion(uuid, identifier, minor, major);
+    } 
 
-
-// constructor(private ibeacon: IBeacon) { }
-
-// initialize(){
-
-// }
-
-// // Request permission to use location on iOS
-// ibeacon.requestAlwaysAuthorization();
-// // create a new delegate and register it with the native layer
-// let delegate = this.ibeacon.Delegate();
-
-// // Subscribe to some of the delegate's event handlers
-// delegate.didRangeBeaconsInRegion()
-//   .subscribe(
-//     data => console.log('didRangeBeaconsInRegion: ', data),
-//     error => console.error();
-//   );
-// delegate.didStartMonitoringForRegion()
-//   .subscribe(
-//     data => console.log('didStartMonitoringForRegion: ', data),
-//     error => console.error();
-//   );
-// delegate.didEnterRegion()
-//   .subscribe(
-//     data => {
-//       console.log('didEnterRegion: ', data);
-//     }
-//   );
-
-// let beaconRegion = this.ibeacon.BeaconRegion('deskBeacon','F7826DA6-ASDF-ASDF-8024-BC5B71E0893E');
-
-// this.ibeacon.startMonitoringForRegion(beaconRegion)
-//   .then(
-//     () => console.log('Native layer recieved the request to monitoring'),
-//     error => console.error('Native layer failed to begin monitoring: ', error)
-//   );
+    /**
+     * Function that creates a BeaconRegion data transfer object.
+     * uuid = guid 00000000-0000-0000-0000-000000000000
+     * identifier = string
+     * 
+     * @throws Error if the BeaconRegion parameters are not valid.
+     */
+    createBeaconRegion(uuid, identifier, major, minor){
+        return this.locationManager.BeaconRegion(identifier, uuid, major, minor);
+    }
+}

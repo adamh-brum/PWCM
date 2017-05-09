@@ -3,26 +3,57 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope) {
   $ionicPlatform.ready(function() {
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    var logText = document.getElementById("log").innerText;
 
-      // Don't remove this line unless you know what you are doing. It stops the viewport
-      // from snapping when text inputs are focused. Ionic handles this internally for
-      // a much nicer keyboard experience.
-      cordova.plugins.Keyboard.disableScroll(true);
+    if(window.cordova &&  window.cordova.plugins) {
+      if(window.cordova.plugins.Keyboard){
+        logText = logText + " - Loading Keyboard Settings";
+
+        // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+        // for form inputs)
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+
+        // Don't remove this line unless you know what you are doing. It stops the viewport
+        // from snapping when text inputs are focused. Ionic handles this internally for
+        // a much nicer keyboard experience.
+        cordova.plugins.Keyboard.disableScroll(true);
+      }
+
+      if(window.cordova.plugins.locationManager){
+        logText = logText + " - Loading Location Settings";
+        window.cordova.plugins.locationManager.enableBluetooth();
+
+        var beaconLogic = new BeaconLogic(window.cordova.plugins.locationManager);
+
+        // airlocate e2c56db5-dffb-48d2-b060-d0f5a71096e0
+        var beaconRegion = beaconLogic.createBeaconRegion("74278BDA-B644-4520-8F0C-720EAF059935", "MiniBeacon_33497")
+      }
     }
+
+    document.getElementById("log").innerHTML = logText;
 
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+    //// new cordova().plugins.locationManager.enableBluetooth();
+    // // // Setup the beacon listening job
+    // // $cordovaBeacon.requestWhenInUseAuthorization();
+
+    // // $rootScope.$on("$cordovaBeacon:didRangeBeaconsInRegion", function(event, pluginResult) {
+    // //     var uniqueBeaconKey;
+    // //     for(var i = 0; i < pluginResult.beacons.length; i++) {
+    // //         $scope.getCardFromServer(pluginResult.beacons[i].uuid);
+    // //     }
+    // //     $scope.$apply();
+    // // });
+
+    // // $cordovaBeacon.startRangingBeaconsInRegion();
   });
 })
 
-.controller('CardsCtrl', function($scope, $http, $ionicSwipeCardDelegate) {
+.controller('CardsCtrl', function($scope, $http) {
   $scope.cards = [];
 
   $scope.getSavedCards = function(){
@@ -65,8 +96,7 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
     var url = "http://localhost:5000/api/Content?locationId=" + beaconId;
     $http.get(url).success( function(response) {
       response.forEach(function(element) {
-        var newCard = {id: Math.random(), htmlContent: element.content, title: element.contentShortDescription};
-        $scope.displayCard(newCard);
+        $scope.addAndDisplayCard(element.content, element.contentShortDescription);
       }, this);
     });
   }
@@ -75,16 +105,14 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
       $scope.cards.unshift(angular.extend({}, card));
   }
 
-  $scope.addStubData = function(content, name){
+  $scope.addAndDisplayCard = function(content, name){
       var newCard = {id: Math.random(), htmlContent: content, title: name};
       $scope.displayCard(newCard);
       $scope.saveCard(newCard);
   }
 
   $scope.getCardFromServer("1");
-  //$scope.addStubData("<h3>Some ideas for your stand up!</h3><ul><li>1: Stand up</li><li>2: Use a ball!</li><li>3: Dance & Sing</li></ul>", "Some more save data");
   $scope.loadSavedCards();
-
 
   $scope.cardDestroyed = function(index) {
     $scope.cards.splice(index, 1);
