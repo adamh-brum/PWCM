@@ -73,6 +73,7 @@
     <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png"/>
   </platform>
   <allow-navigation href="http://192.168.0.29:8100"/>
+  <allow-navigation href="http://172.16.8.214:8100"/>
   <plugin name="com.unarin.cordova.beacon" spec="~3.4.0"/>
   <plugin name="cordova-sqlite-storage" spec="~2.0.3"/>
 </widget>

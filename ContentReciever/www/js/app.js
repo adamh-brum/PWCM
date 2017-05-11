@@ -5,11 +5,9 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
 
 .run(function($ionicPlatform, $rootScope) {
   $ionicPlatform.ready(function() {
-    var logText = document.getElementById("log").innerText;
-
     if(window.cordova &&  window.cordova.plugins) {
       if(window.cordova.plugins.Keyboard){
-        logText = logText + " - Loading Keyboard Settings";
+        console.log("Updating keyboard settings (Hide keyboard, disable scroll)")
 
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -21,35 +19,56 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
         cordova.plugins.Keyboard.disableScroll(true);
       }
 
-      if(window.cordova.plugins.locationManager){
-        logText = logText + " - Loading Location Settings";
-        window.cordova.plugins.locationManager.enableBluetooth();
+      if(window.cordova.plugins.notification){
+        console.log("Requesting notification permission");
+        window.cordova.plugins.notification.local.promptForPermission();
+      }
 
-        var beaconLogic = new BeaconLogic(window.cordova.plugins.locationManager);
+      if(window.cordova.plugins.locationManager){
+        console.log("Requesting Location Permission");
+        cordova.plugins.locationManager.requestAlwaysAuthorization();
+
+        console.log("Location Manager enabled. Will begin ranging for beacons");
+        var delegate = new window.cordova.plugins.locationManager.Delegate();
+
+        delegate.didDetermineStateForRegion = function (pluginResult) {
+            console.log('didDetermineStateForRegion: ' + JSON.stringify(pluginResult));
+        };
+
+        delegate.didExitRegion = function(pluginResult) {
+            console.log('didExitRegion: ' + JSON.stringify(pluginResult));
+        };
+
+        delegate.didEnterRegion = function(pluginResult) {
+          console.log('didEnterRegion: ' + JSON.stringify(pluginResult));
+        };
+
+        delegate.didStartMonitoringForRegion = function (pluginResult) {
+            console.log('didStartMonitoringForRegion:', pluginResult);
+        };
+
+        cordova.plugins.locationManager.setDelegate(delegate);
 
         // airlocate e2c56db5-dffb-48d2-b060-d0f5a71096e0
-        var beaconRegion = beaconLogic.createBeaconRegion("74278BDA-B644-4520-8F0C-720EAF059935", "MiniBeacon_33497")
+        // var beaconLogic = new BeaconLogic(window.cordova.plugins.locationManager);
+        // var beaconRegion = beaconLogic.createBeaconRegion("74278BDA-B644-4520-8F0C-720EAF059935", "MiniBeacon_33497")
+        var region = new cordova.plugins.locationManager.BeaconRegion("MiniBeacon_33497", "74278BDA-B644-4520-8F0C-720EAF059935");
+        console.log("Created region")
+        console.log(JSON.stringify(region))
+
+        cordova.plugins.locationManager.startMonitoringForRegion(region)
+        .fail(console.error)
+        .done();
+
+        cordova.plugins.locationManager.startRangingBeaconsInRegion(region)
+        .fail(console.error)
+        .done();
       }
     }
-
-    document.getElementById("log").innerHTML = logText;
 
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
-    //// new cordova().plugins.locationManager.enableBluetooth();
-    // // // Setup the beacon listening job
-    // // $cordovaBeacon.requestWhenInUseAuthorization();
-
-    // // $rootScope.$on("$cordovaBeacon:didRangeBeaconsInRegion", function(event, pluginResult) {
-    // //     var uniqueBeaconKey;
-    // //     for(var i = 0; i < pluginResult.beacons.length; i++) {
-    // //         $scope.getCardFromServer(pluginResult.beacons[i].uuid);
-    // //     }
-    // //     $scope.$apply();
-    // // });
-
-    // // $cordovaBeacon.startRangingBeaconsInRegion();
   });
 })
 
@@ -111,7 +130,7 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
       $scope.saveCard(newCard);
   }
 
-  $scope.getCardFromServer("1");
+  // $scope.getCardFromServer("1");
   $scope.loadSavedCards();
 
   $scope.cardDestroyed = function(index) {
