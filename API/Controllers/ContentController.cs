@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Controllers.Models;
+using API.DataLogic.Models;
+using API.DataLogic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -10,31 +12,34 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class ContentController : Controller
     {
+        private IDataLogic dataLogic;
+
+        public ContentController()
+        {
+            this.dataLogic = new InMemoryDataLogic();
+        }
+
         // GET api/values
         [HttpGet]
         public IEnumerable<ContentModel> Get(string locationId)
         {
-            switch(locationId)
+            bool parsed = false;
+            Guid beaconId = Guid.Empty;
+            parsed = Guid.TryParse(locationId, out beaconId);
+            if(!parsed)
             {
-                case "1":
-                {
-                    return new ContentModel[] 
-                    { 
-                        new ContentModel()
-                        {
-                            LocationName = "West Midlands, UK",
-                            RequestDateTime = DateTime.Now,
-                            ContentShortDescription = "Notification 1",
-                            Content = "<h1>BOO</H1>"
-                        }
-                    };
-                }
-                default:
-                {
-                    // No content
-                    return new ContentModel[0];
-                }
+                return null;
             }
+
+            DateTime requestTime = DateTime.Now;
+            var content = this.dataLogic.GetScheduledContent(beaconId, requestTime);
+            return content.Content.Select(c => new ContentModel()
+            {
+                LocationName = content.Location,
+                RequestDateTime = requestTime,
+                ContentShortDescription = c.Title,
+                Content = c.Value
+            });
         }
 
         // // POST api/values

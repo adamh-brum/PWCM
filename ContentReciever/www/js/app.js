@@ -130,7 +130,8 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
       $scope.saveCard(newCard);
   }
 
-  // $scope.getCardFromServer("1");
+  // $scope.getCardFromServer("1");\
+  $scope.addAndDisplayCard("<p>Here with my mentor</p>", 'Catch up');
   $scope.loadSavedCards();
 
   $scope.cardDestroyed = function(index) {
