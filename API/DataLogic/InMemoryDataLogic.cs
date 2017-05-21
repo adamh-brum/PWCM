@@ -117,8 +117,8 @@ namespace API.DataLogic
                     return new ScheduledContent()
                     {
                         Location = beacon.Location,
-                        Content = content;
-                    }
+                        Content = content
+                    };
                 }
             }
 

@@ -3,7 +3,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
 
-.run(function($ionicPlatform, $rootScope) {
+.run(function($ionicPlatform, $rootScope, $http) {
   $ionicPlatform.ready(function() {
     if(window.cordova &&  window.cordova.plugins) {
       if(window.cordova.plugins.Keyboard){
@@ -49,20 +49,26 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
 
         cordova.plugins.locationManager.setDelegate(delegate);
 
-        // airlocate e2c56db5-dffb-48d2-b060-d0f5a71096e0
-        // var beaconLogic = new BeaconLogic(window.cordova.plugins.locationManager);
-        // var beaconRegion = beaconLogic.createBeaconRegion("74278BDA-B644-4520-8F0C-720EAF059935", "MiniBeacon_33497")
-        var region = new cordova.plugins.locationManager.BeaconRegion("MiniBeacon_33497", "74278BDA-B644-4520-8F0C-720EAF059935");
-        console.log("Created region")
-        console.log(JSON.stringify(region))
+        // Get beacons from the server
+        console.log("Requesting beacons from server");
+        var url = "http://localhost:5000/api/Beacon";
+        $http.get(url).success( function(response) {
+          console.log("Response recieved from server");
+          console.log(JSON.stringify(response));
+          response.forEach(function(element) {
+            var id = element.name;
+            var uuid = element.id.toString();
+            var region = new cordova.plugins.locationManager.BeaconRegion(id, uuid, 0, 0);
 
-        cordova.plugins.locationManager.startMonitoringForRegion(region)
-        .fail(console.error)
-        .done();
+            cordova.plugins.locationManager.startMonitoringForRegion(region)
+            .fail(console.error)
+            .done();
 
-        cordova.plugins.locationManager.startRangingBeaconsInRegion(region)
-        .fail(console.error)
-        .done();
+            cordova.plugins.locationManager.startRangingBeaconsInRegion(region)
+            .fail(console.error)
+            .done();
+              }, this);
+        });
       }
     }
 
@@ -111,7 +117,6 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
   }
 
   $scope.getCardFromServer = function(beaconId){
-    beaconId = "1";
     var url = "http://localhost:5000/api/Content?locationId=" + beaconId;
     $http.get(url).success( function(response) {
       response.forEach(function(element) {

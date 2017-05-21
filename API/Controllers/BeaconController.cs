@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,11 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [Route("api/[controller]")]
-    public class ContentController : Controller
+    public class BeaconController : Controller
     {
         private IDataLogic dataLogic;
 
-        public ContentController()
+        public BeaconController()
         {
             this.dataLogic = new InMemoryDataLogic();
             
@@ -27,25 +27,9 @@ namespace API.Controllers
 
         // GET api/values
         [HttpGet]
-        public IEnumerable<ContentModel> Get(string locationId)
+        public IEnumerable<Beacon> Get()
         {
-            bool parsed = false;
-            Guid beaconId = Guid.Empty;
-            parsed = Guid.TryParse(locationId, out beaconId);
-            if(!parsed)
-            {
-                return null;
-            }
-
-            DateTime requestTime = DateTime.Now;
-            var content = this.dataLogic.GetScheduledContent(beaconId, requestTime);
-            return content.Content.Select(c => new ContentModel()
-            {
-                LocationName = content.Location,
-                RequestDateTime = requestTime,
-                ContentShortDescription = c.Title,
-                Content = c.Value
-            });
+            return this.dataLogic.GetBeacons();
         }
 
         // // POST api/values
