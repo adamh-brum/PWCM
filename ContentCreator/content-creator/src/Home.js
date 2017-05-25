@@ -7,6 +7,9 @@ import FontAwesome from 'react-fontawesome';
 import { GridList, GridTile } from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import PlusIcon from 'material-ui/svg-icons/content/add';
+import AddBeaconComponent from './AddBeacon.js';
+import ReactDOM from 'react-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 const HomeComponent = class HomeComponent extends React.Component {
     constructor(props) {
@@ -16,30 +19,31 @@ const HomeComponent = class HomeComponent extends React.Component {
     }
 
     navigate(event) {
-        alert('A name was submitted: ' + this.state.value);
-        event.preventDefault();
+        ReactDOM.render(
+            <MuiThemeProvider>
+                <AddBeaconComponent />
+            </MuiThemeProvider>,
+            document.getElementById('root'));
     }
 
     render() {
-        return (<div id="home" >
-            <div className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <h2>Welcome to the Design Studio</h2>
-            </div>
-            <p className="App-intro">
-                Use the buttons below to get started.<FontAwesome name="plus" />
-            </p>
-            <div>
-                <GridList>
-                    <GridTile
-                        title="Register a Beacon"
-                        subtitle={<span>Register a new beacon to use in campaigns and events</span>}
-                        actionIcon={<IconButton onClick=""><PlusIcon color="white" /></IconButton>}>
-                        <img src={BeaconImage} />
-                    </GridTile>
-                </GridList>
-            </div>
-        </div >);
+        return (
+            <div id="home">
+                <div className="App App-header">
+                    <img src={logo} className="App-logo" alt="logo" />
+                    <h2>Welcome to the Design Studio</h2>
+                </div>
+                <div>
+                    <GridList>
+                        <GridTile
+                            title="Register a Beacon"
+                            subtitle={<span>Register a new beacon to use in campaigns and events</span>}
+                            actionIcon={<IconButton onClick={this.navigate}><PlusIcon color="white" /></IconButton>}>
+                            <img src={BeaconImage} />
+                        </GridTile>
+                    </GridList>
+                </div>
+            </div >);
     }
 }
 
