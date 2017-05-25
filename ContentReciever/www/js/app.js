@@ -106,9 +106,28 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
   }
 
   $scope.saveCard = function(card){
+    console.log("Saving a new card to device");
+
     // Save the card
     if(typeof(Storage) != "undefined") {
+        // Retrieve the saved cards
         var cards = $scope.getSavedCards();
+
+        // if length is greater than 4, delete excess cards
+        // this means, after latest card is added, app is only storing 5
+        var count = cards.length;
+        console.log(count + " cards already saved on the device.");
+
+        if(count > 4){
+          console.log("The device currently has too many cards saved. Cleaning.")
+          var cardsToDelete = count - 4;
+
+          console.log("Deleting " + cardsToDelete + " cards.")
+          cards.splice(0, cardsToDelete);
+        }
+
+        // Cards are added to array and storage now
+        console.log("Now displaying card and saving updated list of cards.")
         cards.unshift(angular.extend({}, card));
         localStorage.setItem("cards", JSON.stringify(cards));
     } else {
@@ -117,9 +136,13 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
   }
 
   $scope.getCardFromServer = function(beaconId){
+    console.log("getCardFromServer: Attempting to retrieve content for beacon UUID: " + beaconId);
+
     var url = "http://localhost:5000/api/Content?locationId=" + beaconId;
     $http.get(url).success( function(response) {
+      //console.log("getCardFromServer: Response recieved from server")
       response.forEach(function(element) {
+        //console.log("getCardFromServer: Response has description: " + element.contentShortDescription);
         $scope.addAndDisplayCard(element.content, element.contentShortDescription);
       }, this);
     });
@@ -131,12 +154,13 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
 
   $scope.addAndDisplayCard = function(content, name){
       var newCard = {id: Math.random(), htmlContent: content, title: name};
+      console.log("addAndDisplayCard: Displaying card " + name);
       $scope.displayCard(newCard);
+      console.log("addAndDisplayCard: Saving card " + name);
       $scope.saveCard(newCard);
   }
 
-  // $scope.getCardFromServer("1");\
-  $scope.addAndDisplayCard("<p>Here with my mentor</p>", 'Catch up');
+  $scope.getCardFromServer("74278BDA-B644-4520-8F0C-720EAF059935")
   $scope.loadSavedCards();
 
   $scope.cardDestroyed = function(index) {
