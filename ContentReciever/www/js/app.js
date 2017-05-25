@@ -105,10 +105,19 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
     }
   }
 
-  $scope.saveCard = function(card){
-    console.log("Saving a new card to device");
+  $scope.displayCard = function(card){
+    $scope.cards.unshift(angular.extend({}, card));
+  }
 
-    // Save the card
+  $scope.addCard = function(content, name, requestDateTime, locationName){
+    console.log("addCard: New card to be added.")
+    var card = {id: Math.random(), htmlContent: content, title: name, dateTime: requestDateTime, location: locationName};
+    console.log("addCard: New card values are " + JSON.stringify(card));
+
+    console.log("addCard: Display card");
+    $scope.displayCard(card);
+
+    console.log("Saving a new card to device");
     if(typeof(Storage) != "undefined") {
         // Retrieve the saved cards
         var cards = $scope.getSavedCards();
@@ -126,12 +135,18 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
           cards.splice(0, cardsToDelete);
         }
 
+        console.log("Sorting cards by date");
+        cards = cards.sort(function(a, b) {
+            a = new Date(a.dateTime);
+            b = new Date(b.dateTime);
+            return a>b ? -1 : a<b ? 1 : 0;
+        });
+
         // Cards are added to array and storage now
-        console.log("Now displaying card and saving updated list of cards.")
-        cards.unshift(angular.extend({}, card));
         localStorage.setItem("cards", JSON.stringify(cards));
-    } else {
-        alert("Sorry, your browser does not support Web Storage...");
+    } 
+    else {
+        alert("Sorry, your device does not support Web Storage...");
     }
   }
 
@@ -143,24 +158,12 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
       //console.log("getCardFromServer: Response recieved from server")
       response.forEach(function(element) {
         //console.log("getCardFromServer: Response has description: " + element.contentShortDescription);
-        $scope.addAndDisplayCard(element.content, element.contentShortDescription);
+        $scope.addCard(element.content, element.contentShortDescription, element.RequestDateTime, element.locationName);
       }, this);
     });
   }
 
-  $scope.displayCard = function(card){
-      $scope.cards.unshift(angular.extend({}, card));
-  }
-
-  $scope.addAndDisplayCard = function(content, name){
-      var newCard = {id: Math.random(), htmlContent: content, title: name};
-      console.log("addAndDisplayCard: Displaying card " + name);
-      $scope.displayCard(newCard);
-      console.log("addAndDisplayCard: Saving card " + name);
-      $scope.saveCard(newCard);
-  }
-
-  $scope.getCardFromServer("74278BDA-B644-4520-8F0C-720EAF059935")
+  $scope.getCardFromServer("74278BDA-B644-4520-8F0C-720EAF059935");
   $scope.loadSavedCards();
 
   $scope.cardDestroyed = function(index) {
