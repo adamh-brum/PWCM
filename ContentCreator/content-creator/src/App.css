@@ -7,6 +7,20 @@
   height: 80px;
 }
 
+.TilesContainer {
+  display: flex;
+}
+
+.Tile {
+  margin: 10px;
+  max-width: 350px;
+}
+
+.TileMedia img {
+    height: 200px; 
+    width: auto; 
+}
+
 .App-header {
   background-color: #222;
   height: 150px;
@@ -16,6 +30,23 @@
 
 .App-intro {
   font-size: large;
+}
+
+.Form {
+  margin: 10px;
+}
+
+.Form Input {
+  margin: 10px;
+  min-width: 300px;
+}
+
+.Form Button {
+  margin: 10px 10px 10px 0px;
+}
+
+.Paper {
+  margin: 10px;
 }
 
 @keyframes App-logo-spin {

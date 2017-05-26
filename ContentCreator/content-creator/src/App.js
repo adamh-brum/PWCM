@@ -5,7 +5,6 @@ import './font-awesome-4.7.0/css/font-awesome.min.css'
 import FontAwesome from 'react-fontawesome';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import GridList from 'material-ui/GridList';
 import HomeComponent from './Home.js'
 
 class App extends Component {
