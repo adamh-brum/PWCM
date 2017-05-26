@@ -20,17 +20,24 @@ namespace API.Controllers
         }
 
         // GET api/values
-        [HttpGet]
+        [HttpGet("")]
         public IEnumerable<Beacon> Get()
         {
             return this.dataLogic.GetBeacons();
         }
 
-        // // POST api/values
-        // [HttpPost]
-        // public void Post([FromBody]string value)
-        // {
-        // }
+        // POST api/values
+        [HttpPost]
+        public void Post(string id, string name, string friendlyName, string location)
+        {
+            Guid guid = Guid.Parse(id);
+
+            // Add the beacon
+            this.dataLogic.AddBeacon(guid, name, friendlyName, location);
+        
+            // Return success response
+            //return CreatedAtRoute("Get", new { id = beacon.Id });
+        }
 
         // // PUT api/values/5
         // [HttpPut("{id}")]

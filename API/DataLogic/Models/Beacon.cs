@@ -13,3 +13,4 @@ namespace API.DataLogic.Models
         public string Location { get; set; }
     }
 }
+

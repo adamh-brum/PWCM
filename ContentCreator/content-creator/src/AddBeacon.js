@@ -5,7 +5,7 @@ import BeaconImage from './img/generic-beacons.jpg';
 import './font-awesome-4.7.0/css/font-awesome.min.css'
 import FontAwesome from 'react-fontawesome';
 import TextField from 'material-ui/TextField';
-
+import axios from 'axios';
 
 const AddBeaconComponent = class AddBeacon extends React.Component {
     constructor(props) {
@@ -37,8 +37,15 @@ const AddBeaconComponent = class AddBeacon extends React.Component {
 
     handleSubmit(event) {
         // Todo validate (All fields mandatory)
-        alert('A UUID was submitted: ' + this.state.uuid);
         event.preventDefault();
+
+        // Submit to API
+        var url = "http://localhost:5000/api/Beacon?Id=" + this.state.uuid + "&Name=" + this.state.id + "&FriendlyName=" + this.state.friendlyName + "&Location=" + this.state.location;
+        axios.post(url).then(res => {
+        //const posts = res.data.data.children.map(obj => obj.data);
+        //this.setState({ posts });
+      });
+
     }
 
     render() {
