@@ -40,10 +40,11 @@ const AddBeaconComponent = class AddBeacon extends React.Component {
         event.preventDefault();
 
         // Submit to API
-        var url = "http://localhost:5000/api/Beacon?Id=" + this.state.uuid + "&Name=" + this.state.id + "&FriendlyName=" + this.state.friendlyName + "&Location=" + this.state.location;
+        var url = "http://localhost:5000/api/Beacon?id=" + this.state.uuid + "&Name=" + this.state.id + "&FriendlyName=" + this.state.friendlyName + "&Location=" + this.state.location;
         axios.post(url).then(res => {
         //const posts = res.data.data.children.map(obj => obj.data);
         //this.setState({ posts });
+        alert("added beacon")
       });
 
     }
