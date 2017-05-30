@@ -21,12 +21,12 @@ namespace API.Controllers
 
         // GET api/values
         [HttpGet]
-        public IEnumerable<ContentModel> Get(string locationId)
+        public IEnumerable<ContentModel> Get(string contentId)
         {
             bool parsed = false;
             Guid beaconId = Guid.Empty;
-            parsed = Guid.TryParse(locationId, out beaconId);
-            if(!parsed)
+            parsed = Guid.TryParse(contentId, out beaconId);
+            if (!parsed)
             {
                 return null;
             }
@@ -42,11 +42,35 @@ namespace API.Controllers
             });
         }
 
-        // // POST api/values
-        // [HttpPost]
-        // public void Post([FromBody]string value)
-        // {
-        // }
+        // POST api/values
+        [HttpPost]
+        public void Post(string shortDescription, string content, string[] locationIds)
+        {
+            // Create content
+            Guid contentId = this.dataLogic.AddContent(shortDescription, content);
+
+            // If any location Id's provided
+            if (locationIds != null)
+            {
+                List<Guid> beacons = new List<Guid>();
+                foreach (var locationId in locationIds)
+                {
+                    bool parsed = false;
+                    Guid beaconId = Guid.Empty;
+                    parsed = Guid.TryParse(locationId, out beaconId);
+                    if (parsed)
+                    {
+                        beacons.Add(beaconId);
+                    }
+                    else
+                    {
+                        // Add validation error
+                    }
+                }
+
+                this.dataLogic.ScheduleContent(contentId, beacons.ToArray(), DateTime.Now, DateTime.Now.AddDays(5));
+            }
+        }
 
         // // PUT api/values/5
         // [HttpPut("{id}")]

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import Button from 'material-ui/Button';
+import ContentDesigner from './ContentDesigner.js';
 import AddBeaconComponent from './AddBeacon.js';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
@@ -24,13 +25,22 @@ const HomeComponent = class HomeComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = { value: '' };
-        this.navigate = this.navigate.bind(this);
+        this.navigateToAddBeacon = this.navigateToAddBeacon.bind(this);
+        this.navigateToContentCreator = this.navigateToContentCreator.bind(this);
     }
 
-    navigate(event) {
+    navigateToAddBeacon(event) {
         ReactDOM.render(
             <MuiThemeProvider>
                 <AddBeaconComponent />
+            </MuiThemeProvider>,
+            document.getElementById('root'));
+    }
+
+    navigateToContentCreator(event) {
+        ReactDOM.render(
+            <MuiThemeProvider>
+                <ContentDesigner />
             </MuiThemeProvider>,
             document.getElementById('root'));
     }
@@ -56,7 +66,7 @@ const HomeComponent = class HomeComponent extends React.Component {
                             </Typography>
                         </CardContent>
                         <CardActions>
-                            <Button compact primary onClick={this.navigate}>Add Beacon</Button>
+                            <Button compact primary onClick={this.navigateToAddBeacon}>Add Beacon</Button>
                         </CardActions>
                     </Card>
                     <Card className="Tile">
@@ -72,7 +82,7 @@ const HomeComponent = class HomeComponent extends React.Component {
                             </Typography>
                         </CardContent>
                         <CardActions>
-                            <Button compact primary onClick={this.navigate}>View Beacons</Button>
+                            <Button compact primary onClick={this.navigateToAddBeacon}>View Beacons</Button>
                         </CardActions>
                     </Card>
                     <Card className="Tile">
@@ -88,7 +98,7 @@ const HomeComponent = class HomeComponent extends React.Component {
                             </Typography>
                         </CardContent>
                         <CardActions>
-                            <Button compact primary onClick={this.navigate}>Design Content</Button>
+                            <Button compact primary onClick={this.navigateToContentCreator}>Design Content</Button>
                         </CardActions>
                     </Card>
                 </div>

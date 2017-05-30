@@ -21,6 +21,11 @@
     width: auto; 
 }
 
+.HtmlEditor {
+  min-width: 500px;
+  min-height: 600px;
+}
+
 .App-header {
   background-color: #222;
   height: 150px;
