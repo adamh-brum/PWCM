@@ -78,7 +78,7 @@ const AddBeaconComponent = class AddBeacon extends React.Component {
                             <Paper className="Paper">
                                 <form id="addBeaconForm" onSubmit={this.handleSubmit} className="Form">
                                     <Input
-                                        placeholder="UUID"
+                                        placeholder="Unique Identifier (UUID)"
                                         value={this.state.uuid}
                                         onChange={this.uuidChanged}
                                         fullWidth={true} />

@@ -21,11 +21,11 @@ namespace API.Controllers
 
         // GET api/values
         [HttpGet]
-        public IEnumerable<ContentModel> Get(string contentId)
+        public IEnumerable<ContentModel> Get(string locationId)
         {
             bool parsed = false;
             Guid beaconId = Guid.Empty;
-            parsed = Guid.TryParse(contentId, out beaconId);
+            parsed = Guid.TryParse(locationId, out beaconId);
             if (!parsed)
             {
                 return null;
