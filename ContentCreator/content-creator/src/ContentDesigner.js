@@ -14,7 +14,9 @@ import Grid from 'material-ui/Grid';
 import Input from 'material-ui/Input/Input';
 import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
 import Checkbox from 'material-ui/Checkbox';
+import {Editor, EditorState} from 'draft-js';
 
+//import '../../node_modules/react-quill/node_modules/quill/dist/quill.snow.css';
 import logo from './logo.svg';
 import './App.css';
 import './font-awesome-4.7.0/css/font-awesome.min.css'
@@ -29,7 +31,8 @@ const TabContainer = props => (
 class ContentDesigner extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { index: 0, notification: '', content: "<h2>This is your content</h2><p>Use the editor on your right to find and insert new elements<p/>", beacons: [], checked: [0]};
+    this.state = { editorState: EditorState.createEmpty(), index: 0, notification: '', content: "<h2>This is your content</h2><p>Use the editor on your right to find and insert new elements<p/>", beacons: [], checked: [0] };
+    this.onChange = (editorState) => this.setState({editorState});
     this.getBeacons();
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -42,7 +45,7 @@ class ContentDesigner extends React.Component {
     axios.get(url).then(res => {
       res.data.forEach(function (element) {
         var newArray = this.state.beacons.slice();
-        newArray.push({beacon: element, checked: false});
+        newArray.push({ beacon: element, checked: false });
         this.setState({ beacons: newArray })
       }, this);
 
@@ -74,8 +77,8 @@ class ContentDesigner extends React.Component {
     event.preventDefault();
 
     var locationIds = [];
-    this.state.beacons.forEach(function(element) {
-      if(element.checked){
+    this.state.beacons.forEach(function (element) {
+      if (element.checked) {
         locationIds.push(element.beacon.id);
       }
     }, this);
@@ -91,20 +94,20 @@ class ContentDesigner extends React.Component {
   }
 
   handleToggle = (event, value) => {
-    this.state.beacons.forEach(function(element) {
-      if(element.beacon.id == value){
+    this.state.beacons.forEach(function (element) {
+      if (element.beacon.id == value) {
         element.checked = !element.checked
       }
     }, this);
   };
 
   checked(value) {
-    this.state.beacons.forEach(function(element) {
-      if(element.beacon.id == value){
+    this.state.beacons.forEach(function (element) {
+      if (element.beacon.id == value) {
         return element.checked;
       }
     }, this);
-  }
+  };
 
   render() {
     return (
@@ -141,7 +144,9 @@ class ContentDesigner extends React.Component {
               <TabContainer>
                 <h3>Content Designer</h3>
                 <p>This HTML editor allows you to create content. This is the content that is broadcast out to user devices</p>
-                <div name="contentHtml" className="HtmlEditor" contentEditable={true}>{this.state.content}</div>
+                <div>
+                  <Editor editorState={this.state.editorState} onChange={this.onChange} />
+                </div>
               </TabContainer>
             }
             {

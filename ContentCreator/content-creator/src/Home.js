@@ -2,24 +2,25 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import Button from 'material-ui/Button';
-import ContentDesigner from './ContentDesigner.js';
-import AddBeaconComponent from './AddBeacon.js';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
+import FontAwesome from 'react-fontawesome';
+
+import ContentDesigner from './ContentDesigner.js';
+import AddBeaconComponent from './AddBeacon.js';
+import ContentEditor from './ContentEditor.js'
 
 import BeaconImage from './img/generic-beacons.jpg';
 import NewBeaconImage from './img/new-beacons.jpg';
 import ContentImage from './img/contentcreation.jpg';
 import BusyBeaconImage from './img/beacon-in-use.png';
 import MarketingCampaignImage from './img/marketing-campaign-strategy.jpg';
-
 import logo from './logo.svg';
 import './App.css';
 import './font-awesome-4.7.0/css/font-awesome.min.css'
-import FontAwesome from 'react-fontawesome';
 
 const HomeComponent = class HomeComponent extends React.Component {
     constructor(props) {
@@ -40,7 +41,7 @@ const HomeComponent = class HomeComponent extends React.Component {
     navigateToContentCreator(event) {
         ReactDOM.render(
             <MuiThemeProvider>
-                <ContentDesigner />
+                <ContentEditor />
             </MuiThemeProvider>,
             document.getElementById('root'));
     }
