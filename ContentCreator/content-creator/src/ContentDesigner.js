@@ -14,7 +14,13 @@ import Grid from 'material-ui/Grid';
 import Input from 'material-ui/Input/Input';
 import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
 import Checkbox from 'material-ui/Checkbox';
-import {Editor, EditorState} from 'draft-js';
+
+// Draft.js imports
+//import ContentEditor from './ViewHelpers/ContentEditor.js'
+import {EditorState} from 'draft-js';
+import Editor from 'draft-js-plugins-editor';
+import createImagePlugin from 'draft-js-image-plugin';
+import './Styles/plugin.css';
 
 //import '../../node_modules/react-quill/node_modules/quill/dist/quill.snow.css';
 import logo from './logo.svg';
@@ -27,6 +33,8 @@ const TabContainer = props => (
     {props.children}
   </div>
 );
+
+const imagePlugin = createImagePlugin();
 
 class ContentDesigner extends React.Component {
   constructor(props) {

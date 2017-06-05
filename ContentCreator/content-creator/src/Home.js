@@ -11,7 +11,6 @@ import FontAwesome from 'react-fontawesome';
 
 import ContentDesigner from './ContentDesigner.js';
 import AddBeaconComponent from './AddBeacon.js';
-import ContentEditor from './ContentEditor.js'
 
 import BeaconImage from './img/generic-beacons.jpg';
 import NewBeaconImage from './img/new-beacons.jpg';
@@ -41,7 +40,7 @@ const HomeComponent = class HomeComponent extends React.Component {
     navigateToContentCreator(event) {
         ReactDOM.render(
             <MuiThemeProvider>
-                <ContentEditor />
+                <ContentDesigner />
             </MuiThemeProvider>,
             document.getElementById('root'));
     }
