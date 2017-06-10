@@ -54,6 +54,36 @@
   margin: 10px;
 }
 
+.designer-left{
+  float: left;
+  min-width: 360px;
+  min-height: 700px;
+}
+
+.designer-right{
+  min-height: 560px;
+}
+
+.red {
+  color: red;
+}
+
+.blue {
+  color: blue;
+}
+
+.green {
+  color: blue;
+}
+
+.yellow {
+  color: yellow;
+}
+
+.violet {
+  color: violet;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

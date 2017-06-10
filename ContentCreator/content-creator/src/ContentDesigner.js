@@ -16,11 +16,12 @@ import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-
 import Checkbox from 'material-ui/Checkbox';
 
 // Draft.js imports
-//import ContentEditor from './ViewHelpers/ContentEditor.js'
-import {EditorState} from 'draft-js';
-import Editor from 'draft-js-plugins-editor';
+import { EditorState } from 'draft-js';
+import Editor from 'draft-js-editor'
+import { composeDecorators } from 'draft-js-plugins-editor';
 import createImagePlugin from 'draft-js-image-plugin';
 import './Styles/plugin.css';
+import editorStyles from './Styles/editorStyles.css';
 
 //import '../../node_modules/react-quill/node_modules/quill/dist/quill.snow.css';
 import logo from './logo.svg';
@@ -36,11 +37,15 @@ const TabContainer = props => (
 
 const imagePlugin = createImagePlugin();
 
+const plugins = [
+  imagePlugin
+];
+
 class ContentDesigner extends React.Component {
   constructor(props) {
     super(props);
     this.state = { editorState: EditorState.createEmpty(), index: 0, notification: '', content: "<h2>This is your content</h2><p>Use the editor on your right to find and insert new elements<p/>", beacons: [], checked: [0] };
-    this.onChange = (editorState) => this.setState({editorState});
+    this.onChange = (editorState) => this.setState({ editorState });
     this.getBeacons();
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -117,6 +122,10 @@ class ContentDesigner extends React.Component {
     }, this);
   };
 
+  focus = () => {
+    this.editor.focus();
+  };
+
   render() {
     return (
       <div id="contentCreator">
@@ -151,9 +160,23 @@ class ContentDesigner extends React.Component {
               this.state.index === 1 &&
               <TabContainer>
                 <h3>Content Designer</h3>
-                <p>This HTML editor allows you to create content. This is the content that is broadcast out to user devices</p>
-                <div>
-                  <Editor editorState={this.state.editorState} onChange={this.onChange} />
+                <p>Welcome to the design part. This is where you get really creative below. <FontAwesome name='rocket' className='red' /> </p>
+                <div className="designer-left">
+                  <div className="editor" onClick={this.focus}>
+                    <Editor editorState={this.state.editorState}
+                      onChange={this.onChange}
+                      plugins={plugins}
+                      ref={(element) => { this.editor = element; }} />
+                  </div>
+                </div>
+                <div className="designer-right">
+                  <p>Stuck for ideas? Here are some things to try</p>
+                  <ul>
+                    <li>See the box on the left <FontAwesome name='cube' className='blue' />? Click inside. </li>
+                    <li>This box can be as wild as your imagination. It's a mockup of a card. This card will be displayed on a mobile phone <FontAwesome name='phone' className='violet' /></li>
+                    <li>When you are inside the box, you can start typing. A toolbar will show up allowing you to do loads of crazy stuff to the messages you're writing</li>
+                    <li>Also, spice up your content with some media. Use the media toolbar to the left to insert pictures and movies</li>
+                  </ul>
                 </div>
               </TabContainer>
             }
