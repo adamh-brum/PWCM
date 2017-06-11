@@ -56,6 +56,7 @@
 
 .designer-left{
   float: left;
+  padding-left: 60px;
   min-width: 360px;
   min-height: 700px;
 }
@@ -82,6 +83,12 @@
 
 .violet {
   color: violet;
+}
+
+.megadraft {
+  border: 2px solid black;
+  min-height: 400px;
+  width: 320px;
 }
 
 @keyframes App-logo-spin {

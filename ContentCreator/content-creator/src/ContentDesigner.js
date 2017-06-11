@@ -16,12 +16,13 @@ import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-
 import Checkbox from 'material-ui/Checkbox';
 
 // Draft.js imports
-import { EditorState } from 'draft-js';
-import Editor from 'draft-js-editor'
-import { composeDecorators } from 'draft-js-plugins-editor';
-import createImagePlugin from 'draft-js-image-plugin';
-import './Styles/plugin.css';
-import editorStyles from './Styles/editorStyles.css';
+import {
+  Editor,
+  createEditorState,
+} from 'medium-draft';
+import { MegadraftEditor, editorStateFromRaw } from "megadraft";
+import "./Styles/Megadraft/css/megadraft.css"
+import {stateToHTML} from 'draft-js-export-html';
 
 //import '../../node_modules/react-quill/node_modules/quill/dist/quill.snow.css';
 import logo from './logo.svg';
@@ -35,22 +36,21 @@ const TabContainer = props => (
   </div>
 );
 
-const imagePlugin = createImagePlugin();
-
-const plugins = [
-  imagePlugin
-];
 
 class ContentDesigner extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { editorState: EditorState.createEmpty(), index: 0, notification: '', content: "<h2>This is your content</h2><p>Use the editor on your right to find and insert new elements<p/>", beacons: [], checked: [0] };
-    this.onChange = (editorState) => this.setState({ editorState });
+    this.state = { editorState: editorStateFromRaw(null), index: 0, notification: '', beacons: [], checked: [0] };
     this.getBeacons();
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.cancelClicked = this.cancelClicked.bind(this);
     this.notificationTextChanged = this.notificationTextChanged.bind(this);
+    this.onContentChanged = this.onContentChanged.bind(this);
+  }
+
+  onContentChanged(editorState) {
+    this.setState({editorState});
   }
 
   getBeacons() {
@@ -97,7 +97,9 @@ class ContentDesigner extends React.Component {
     }, this);
 
     // Submit to API
-    var url = "http://localhost:5000/api/Content?shortDescription=" + this.state.notification + "&content=" + this.state.content + "&locationIds=" + locationIds;
+    let html = stateToHTML(this.state.editorState.getCurrentContent());
+    alert(html);
+    var url = "http://localhost:5000/api/Content?shortDescription=" + this.state.notification + "&content=" + html + "&locationIds=" + locationIds;
     alert(url);
     axios.post(url).then(res => {
       //const posts = res.data.data.children.map(obj => obj.data);
@@ -120,10 +122,6 @@ class ContentDesigner extends React.Component {
         return element.checked;
       }
     }, this);
-  };
-
-  focus = () => {
-    this.editor.focus();
   };
 
   render() {
@@ -160,13 +158,12 @@ class ContentDesigner extends React.Component {
               this.state.index === 1 &&
               <TabContainer>
                 <h3>Content Designer</h3>
-                <p>Welcome to the design part. This is where you get really creative below. <FontAwesome name='rocket' className='red' /> </p>
+                <p>Welcome to the design part. This is where you get really creative. <FontAwesome name='rocket' className='red' /> </p>
                 <div className="designer-left">
-                  <div className="editor" onClick={this.focus}>
-                    <Editor editorState={this.state.editorState}
-                      onChange={this.onChange}
-                      plugins={plugins}
-                      ref={(element) => { this.editor = element; }} />
+                  <div onClick={this.focus}>
+                    <MegadraftEditor
+                      editorState={this.state.editorState}
+                      onChange={this.onContentChanged} />
                   </div>
                 </div>
                 <div className="designer-right">
@@ -174,8 +171,8 @@ class ContentDesigner extends React.Component {
                   <ul>
                     <li>See the box on the left <FontAwesome name='cube' className='blue' />? Click inside. </li>
                     <li>This box can be as wild as your imagination. It's a mockup of a card. This card will be displayed on a mobile phone <FontAwesome name='phone' className='violet' /></li>
-                    <li>When you are inside the box, you can start typing. A toolbar will show up allowing you to do loads of crazy stuff to the messages you're writing</li>
-                    <li>Also, spice up your content with some media. Use the media toolbar to the left to insert pictures and movies</li>
+                    <li>When you are inside the box, you can start typing. Try highlighting words you type and see what happens....</li>
+                    <li>Also, spice up your content with some media. Use the media toolbar to the left (+) to insert pictures and movies</li>
                   </ul>
                 </div>
               </TabContainer>
