@@ -1,7 +1,8 @@
-namespace API.DataLogic.Models
+namespace API.DataLogic.ViewModels
 {
     using System;
     using System.Collections.Generic;
+    using API.DataLogic.Models;
 
     public class ScheduledContent
     {

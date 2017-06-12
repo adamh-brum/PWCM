@@ -47,7 +47,7 @@ namespace API.Controllers
         public void Post(string shortDescription, string content, string[] locationIds)
         {
             // Create content
-            Guid contentId = this.dataLogic.AddContent(shortDescription, content);
+            int contentId = this.dataLogic.AddContent(shortDescription, content);
 
             // If any location Id's provided
             if (locationIds != null)

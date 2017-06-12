@@ -17,18 +17,17 @@ namespace API.DataLogic
         /// <param name="title">The title for the content</param>
         /// <param name="content">Content</param>
         /// <returns>Content ID</returns>
-        public Guid AddContent(string title, string content)
+        public int AddContent(string title, string content)
         {
-            Guid id = Guid.NewGuid();
-
-            this.contentList.Add(new Content()
+            Content newObject = new Content()
             {
-                Id = id,
                 Title = title,
                 Value = content
-            });
+            };
 
-            return id;
+            this.contentList.Add(newObject);
+
+            return newObject.Id;
         }
 
         /// <summary>
@@ -36,7 +35,7 @@ namespace API.DataLogic
         /// </summary>
         /// <param name="contentId">Content ID</param>
         /// <returns>Content data model</returns>
-        public Content GetContent(Guid contentId)
+        public Content GetContent(int contentId)
         {
             return this.contentList.FirstOrDefault(c => c.Id == contentId);
         }
@@ -84,7 +83,7 @@ namespace API.DataLogic
         /// <param name="beaconIds"></param>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
-        public void ScheduleContent(Guid contentId, Guid[] beaconIds, DateTime startDate, DateTime endDate)
+        public void ScheduleContent(int contentId, Guid[] beaconIds, DateTime startDate, DateTime endDate)
         {
             foreach(var beaconId in beaconIds)
             {
@@ -104,7 +103,7 @@ namespace API.DataLogic
         /// <param name="beaconId">ID of the beacon</param>
         /// <param name="currentTime">Current time</param>
         /// <returns></returns>
-        public ScheduledContent GetScheduledContent(Guid beaconId, DateTime currentTime)
+        public ViewModels.ScheduledContent GetScheduledContent(Guid beaconId, DateTime currentTime)
         {
             var beacon = this.beaconList.FirstOrDefault(b => b.Id == beaconId);
             var contentIds = this.schedule.Where(s => s.BeaconId == beaconId && s.StartDateTime <= currentTime && s.EndDateTime >= currentTime)?.Select(s => s.ContentId);
@@ -114,7 +113,7 @@ namespace API.DataLogic
                 var content = this.contentList.Where(c => contentIds.Contains(c.Id))?.ToList();
                 if(content != null)
                 {
-                    return new ScheduledContent()
+                    return new ViewModels.ScheduledContent()
                     {
                         Location = beacon.Location,
                         Content = content

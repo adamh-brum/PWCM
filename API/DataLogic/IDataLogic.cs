@@ -1,5 +1,6 @@
 namespace API.DataLogic
 {
+    using API.DataLogic.ViewModels;
     using API.DataLogic.Models;
     using System.Collections.Generic;
     using System;
@@ -12,14 +13,14 @@ namespace API.DataLogic
         /// <param name="title">The title for the content</param>
         /// <param name="content">Content</param>
         /// <returns>Content ID</returns>
-        Guid AddContent(string title, string content);
+        int AddContent(string title, string content);
 
         /// <summary>
         /// Returns the content that matches the given ID
         /// </summary>
         /// <param name="contentId">Content ID</param>
         /// <returns>Content data model</returns>
-        Content GetContent(Guid contentId);
+        Content GetContent(int contentId);
 
         /// <summary>
         /// Adds a beacon 
@@ -49,7 +50,7 @@ namespace API.DataLogic
         /// <param name="beaconIds"></param>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
-        void ScheduleContent(Guid contentId, Guid[] beaconIds, DateTime startDate, DateTime endDate);
+        void ScheduleContent(int contentId, Guid[] beaconIds, DateTime startDate, DateTime endDate);
 
         /// <summary>
         /// Returns content currently scheduled for a given beacon
@@ -57,6 +58,6 @@ namespace API.DataLogic
         /// <param name="beaconId"></param>
         /// <param name="currentTime"></param>
         /// <returns></returns>
-        ScheduledContent GetScheduledContent(Guid beaconId, DateTime currentTime);
+        ViewModels.ScheduledContent GetScheduledContent(Guid beaconId, DateTime currentTime);
     }
 }
