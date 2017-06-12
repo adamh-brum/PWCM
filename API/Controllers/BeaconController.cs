@@ -16,7 +16,7 @@ namespace API.Controllers
 
         public BeaconController()
         {
-            this.dataLogic = DataGenerator.GenerateData();
+            this.dataLogic = DataGenerator.GenerateSqliteData();
         }
 
         // GET api/values
@@ -45,10 +45,12 @@ namespace API.Controllers
         // {
         // }
 
-        // // DELETE api/values/5
-        // [HttpDelete("{id}")]
-        // public void Delete(int id)
-        // {
-        // }
+        // DELETE api/values/5
+        [HttpDelete("")]
+        public void Delete(string id)
+        {
+            Guid guid = Guid.Parse(id);
+            this.dataLogic.DeleteBeacon(guid);
+        }
     }
 }

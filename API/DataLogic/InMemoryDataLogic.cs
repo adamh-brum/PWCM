@@ -123,5 +123,11 @@ namespace API.DataLogic
 
             return null;
         }
+
+        public void DeleteBeacon(Guid uuid)
+        {
+            var item = this.beaconList.FirstOrDefault(b => b.Id == uuid);
+            this.beaconList.Remove(item);
+        }
     }
 }

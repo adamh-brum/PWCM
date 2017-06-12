@@ -38,6 +38,12 @@ namespace API.DataLogic
         Beacon GetBeacon(Guid beaconId);
 
         /// <summary>
+        /// Deletes a beacon with the given identifier from the system
+        /// </summary>
+        /// <param name="id">Beacon UUID known to the syste,</param>
+        void DeleteBeacon(Guid uuid);
+
+        /// <summary>
         /// Returns all beacons registered in the system
         /// </summary>
         /// <returns>All beacons</returns>

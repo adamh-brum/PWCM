@@ -16,7 +16,7 @@ namespace API.Controllers
 
         public ScheduleController()
         {
-            this.dataLogic = DataGenerator.GenerateData();
+            this.dataLogic = DataGenerator.GenerateSqliteData();
         }
 
         // GET api/values

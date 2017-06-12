@@ -29,6 +29,7 @@ namespace API.DataLogic
             using (var db = new ApplicationDbContext())
             {
                 db.Content.Add(newObject);
+                db.SaveChanges();
             }
 
             return newObject.Id;
@@ -66,6 +67,26 @@ namespace API.DataLogic
             using (var db = new ApplicationDbContext())
             {
                 db.Beacons.Add(newObject);
+                db.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Deletes a beacon by the given UUID
+        /// </summary>
+        /// <param name="beaconUUID">UUID</param>
+        public void DeleteBeacon(Guid beaconUUID)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var objectToDelete = db.Beacons.FirstOrDefault(beacon => beacon.Id == beaconUUID);
+
+                if (objectToDelete != null)
+                {
+                    db.Beacons.Remove(objectToDelete);
+                }
+
+                db.SaveChanges();
             }
         }
 
@@ -115,6 +136,8 @@ namespace API.DataLogic
                         EndDateTime = endDate
                     });
                 }
+
+                db.SaveChanges();
             }
         }
 
