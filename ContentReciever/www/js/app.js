@@ -167,6 +167,8 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
         else if (card.thumbDownClass == thumbsDown) {
           card.thumbDownClass = emptyThumbsDown;
         }
+
+        updateCards($scope.cards);
       });
     }
 
@@ -202,6 +204,8 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
         else if (card.thumbUpClass == thumbsUp) {
           card.thumbUpClass = emptyThumbsUp;
         }
+
+        updateCards($scope.cards);
       });
     }
 
