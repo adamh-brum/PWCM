@@ -35,6 +35,7 @@ namespace API.Controllers
             var content = this.dataLogic.GetScheduledContent(beaconId, requestTime);
             return content.Content.Select(c => new ContentModel()
             {
+                Id = c.Id,
                 LocationName = content.Location,
                 RequestDateTime = requestTime,
                 ContentShortDescription = c.Title,

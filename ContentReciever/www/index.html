@@ -31,6 +31,7 @@
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
+    <script src="js/apiHelper.js"></script>
     <script src="js/beaconLogic.js"></script>
     <script src="js/app.js"></script>
     <script src="js/cacheManagement.js"></script>
@@ -52,8 +53,8 @@
             <div class="item item-text-wrap">
               <h2>{{card.title}}</h2>
               <div ng-bind-html="card.htmlContent"></div>
-              <a href=''><i class="fa fa-thumbs-o-up"></i></a>
-              <a href=''><i class="fa fa-thumbs-o-down"></i></a>
+              <a href='' on-tap="upRateCard(card.id)"><i class="{{card.thumbUpClass}}"></i></a>
+              <a href='' on-tap="downRateCard(card.id)"><i class="{{card.thumbDownClass}}"></i></a>
             </div>
           </div>
         </ion-content>

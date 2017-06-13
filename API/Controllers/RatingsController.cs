@@ -20,7 +20,7 @@ namespace API.Controllers
         }
 
         // GET api/values
-        [HttpGet("")]
+        [HttpGet]
         public IEnumerable<Rating> Get()
         {
             return this.dataLogic.GetRatings();

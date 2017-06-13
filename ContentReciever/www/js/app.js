@@ -100,9 +100,9 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
       $scope.cards.unshift(angular.extend({}, card));
     }
 
-    $scope.addCard = function (content, name, requestDateTime, locationName) {
+    $scope.addCard = function (contentId, content, name, requestDateTime, locationName) {
       console.log("addCard: New card to be added.")
-      var card = { id: Math.random(), htmlContent: content, title: name, dateTime: requestDateTime, location: locationName };
+      var card = { id: contentId, htmlContent: content, title: name, dateTime: requestDateTime, location: locationName, thumbUpClass: "fa fa-thumbs-o-up", thumbDownClass: "fa fa-thumbs-o-down" };
       console.log("addCard: New card values are " + JSON.stringify(card));
 
       console.log("addCard: Display card");
@@ -120,16 +120,107 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
       var url = "http://localhost:5000/api/Schedule?locationId=" + beaconId;
       $http.get(url).success(function (response) {
         console.log("getCardFromServer: Response recieved from server")
-        console.log(response); 
+        console.log(response);
         console.log("getCardFromServer: Response is " + JSON.stringify(response));
         response.forEach(function (element) {
           console.log("getCardFromServer: Parsing a response");
           console.log("getCardFromServer: Response has description: " + element.contentShortDescription);
-          $scope.addCard(element.content, element.contentShortDescription, element.RequestDateTime, element.locationName);
+          $scope.addCard(element.id, element.content, element.contentShortDescription, element.RequestDateTime, element.locationName);
         }, this);
       });
     }
 
+    var emptyThumbsDown = "fa fa-thumbs-o-down";
+    var thumbsDown = "fa fa-thumbs-down";
+    var emptyThumbsUp = "fa fa-thumbs-o-up";
+    var thumbsUp = "fa fa-thumbs-up";
+
+    $scope.downRateCard = function (id) {
+      console.log("rateCard: up rate content " + id);
+
+      var card = $scope.getCardById(id);
+      console.log("rateCard: card found: " + JSON.stringify(card));
+
+      // Also, if card is uprated, down rate
+      if (card.thumbUpClass == thumbsUp) {
+        $scope.upRateCard(id);
+      }
+
+      var rating = 0;
+
+      // if card is already downrated, rate up
+      if (card.thumbDownClass == thumbsDown) {
+        rating = 1;
+      } else {
+        rating = -1;
+      }
+
+      console.log("rateCard: card " + id + " given rating " + rating);
+
+      var url = generateRatingsUrl(id, rating);
+      console.log("rateCard: Sending rating to API on URL '" + url + "'");
+
+      $http.put(url).success(function (response) {
+        if (card.thumbDownClass == emptyThumbsDown) {
+          card.thumbDownClass = thumbsDown;
+        }
+        else if (card.thumbDownClass == thumbsDown) {
+          card.thumbDownClass = emptyThumbsDown;
+        }
+      });
+    }
+
+    $scope.upRateCard = function (id) {
+      console.log("rateCard: up rate content " + id);
+
+      var card = $scope.getCardById(id);
+      console.log("rateCard: card found: " + JSON.stringify(card));
+
+      // Also, if card is downrated, up rate
+      if (card.thumbDownClass == thumbsDown) {
+        $scope.downRateCard(id);
+      }
+
+      var rating = 0;
+
+      // if card is already rated highly, un-rate
+      if (card.thumbUpClass == thumbsUp) {
+        rating = -1; // downrate
+      } else {
+        rating = 1;
+      }
+
+      console.log("rateCard: card " + id + " given rating " + rating);
+
+      var url = generateRatingsUrl(id, rating);
+      console.log("rateCard: Sending rating to API on URL '" + url + "'");
+
+      $http.put(url).success(function (response) {
+        if (card.thumbUpClass == emptyThumbsUp) {
+          card.thumbUpClass = thumbsUp;
+        }
+        else if (card.thumbUpClass == thumbsUp) {
+          card.thumbUpClass = emptyThumbsUp;
+        }
+      });
+    }
+
+    $scope.getCardById = function (contentId) {
+      console.log("getCardsById: ID is " + contentId);
+      var card = null;
+      $scope.cards.forEach(function (possibleCard) {
+        if (possibleCard.id == contentId) {
+          console.log("getCardsById: Found card " + JSON.stringify(possibleCard));
+          card = possibleCard;
+        }
+
+        console.log("getCardsById: No card found");
+      });
+
+      return card;
+    }
+
+    //clearCache();
     $scope.getCardFromServer("74278BDA-B644-4520-8F0C-720EAF059935");
     $scope.loadSavedCards();
 

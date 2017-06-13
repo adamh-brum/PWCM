@@ -4,6 +4,9 @@ readCache = function () {
     var cache = { cards: [] };
     if (cacheString != null) {
       var cache = JSON.parse(cacheString);
+      if( cache == null ){
+        cache = { cards: [] };
+      }
     }
 
     return cache;
@@ -46,4 +49,8 @@ updateCards = function (cards) {
 writeCache = function (cache) {
   // Cards are added to array and storage now
   localStorage.setItem("cache", JSON.stringify(cache));
+}
+
+clearCache = function (cache) {
+  localStorage.setItem("cache", null);
 }
