@@ -11,6 +11,8 @@ namespace API.DataLogic
 
         public DbSet<ScheduledItem> ScheduledItems { get; set; }
 
+        public DbSet<Rating> Ratings { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Filename=./nearbycontent.db");

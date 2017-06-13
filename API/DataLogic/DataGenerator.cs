@@ -6,13 +6,6 @@ namespace API.DataLogic
 
     public static class DataGenerator
     {
-        public static IDataLogic GenerateInMemoryData()
-        {
-            var dataLogic = new InMemoryDataLogic();
-            SeedData(dataLogic);
-            return dataLogic;
-        }
-
         public static IDataLogic GenerateSqliteData()
         {
             var dataLogic = new SqliteDataLogic();

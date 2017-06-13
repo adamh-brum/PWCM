@@ -37,6 +37,20 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Ratings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ContentId = table.Column<int>(nullable: false),
+                    RatingCount = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ratings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ScheduledItems",
                 columns: table => new
                 {
@@ -60,6 +74,9 @@ namespace API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Content");
+
+            migrationBuilder.DropTable(
+                name: "Ratings");
 
             migrationBuilder.DropTable(
                 name: "ScheduledItems");

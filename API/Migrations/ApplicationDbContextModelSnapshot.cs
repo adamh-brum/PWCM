@@ -50,6 +50,20 @@ namespace API.Migrations
                     b.ToTable("Content");
                 });
 
+            modelBuilder.Entity("API.DataLogic.Models.Rating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ContentId");
+
+                    b.Property<int>("RatingCount");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ratings");
+                });
+
             modelBuilder.Entity("API.DataLogic.Models.ScheduledItem", b =>
                 {
                     b.Property<int>("Id")

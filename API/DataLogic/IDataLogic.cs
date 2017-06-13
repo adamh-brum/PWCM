@@ -14,6 +14,7 @@ namespace API.DataLogic
         /// <param name="content">Content</param>
         /// <returns>Content ID</returns>
         int AddContent(string title, string content);
+        IEnumerable<Rating> GetRatings();
 
         /// <summary>
         /// Returns the content that matches the given ID
@@ -21,6 +22,7 @@ namespace API.DataLogic
         /// <param name="contentId">Content ID</param>
         /// <returns>Content data model</returns>
         Content GetContent(int contentId);
+        void UpdateRating(int contentId, int rating);
 
         /// <summary>
         /// Adds a beacon 

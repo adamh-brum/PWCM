@@ -4,7 +4,7 @@ namespace API.Controllers.Models
 
     public class ContentModel
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         public string LocationName { get; set; }
 

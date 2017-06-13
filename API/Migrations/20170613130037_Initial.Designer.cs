@@ -8,7 +8,7 @@ using API.DataLogic;
 namespace API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170612102438_Initial")]
+    [Migration("20170613130037_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,6 +49,20 @@ namespace API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Content");
+                });
+
+            modelBuilder.Entity("API.DataLogic.Models.Rating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ContentId");
+
+                    b.Property<int>("RatingCount");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("API.DataLogic.Models.ScheduledItem", b =>

@@ -170,5 +170,36 @@ namespace API.DataLogic
 
             return null;
         }
+
+        public IEnumerable<Rating> GetRatings()
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                return db.Ratings;
+            }
+        }
+
+        public void UpdateRating(int contentId, int rating)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var contentRating = db.Ratings.FirstOrDefault(r => r.ContentId == contentId);
+                if (contentRating == null)
+                {
+                    contentRating = new Rating()
+                    {
+                        ContentId = contentId
+                    };
+
+                    db.Ratings.Add(contentRating);
+                }
+
+                // Now update the content rating
+                contentRating.RatingCount += rating;
+
+                // Save the changes
+                db.SaveChanges();
+            }
+        }
     }
 }
