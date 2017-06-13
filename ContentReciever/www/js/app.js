@@ -85,7 +85,11 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
     console.log("locading CardsCtrl");
 
     $scope.getSavedCards = function () {
-      return readCache().cards;
+      console.log("getSavedCards is reading saved cards");
+      var cache = readCache();
+
+      console.log("getSavedCards read the cache and found the cards: " + JSON.stringify(cache.cards));
+      return cache.cards;
     }
 
     $scope.loadSavedCards = function () {
@@ -158,18 +162,23 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
       console.log("rateCard: card " + id + " given rating " + rating);
 
       var url = generateRatingsUrl(id, rating);
+      if (card.thumbDownClass == emptyThumbsDown) {
+        card.thumbDownClass = thumbsDown;
+      }
+      else if (card.thumbDownClass == thumbsDown) {
+        card.thumbDownClass = emptyThumbsDown;
+      }
+
+      updateCards($scope.cards);
+
       console.log("rateCard: Sending rating to API on URL '" + url + "'");
 
       $http.put(url).success(function (response) {
-        if (card.thumbDownClass == emptyThumbsDown) {
-          card.thumbDownClass = thumbsDown;
-        }
-        else if (card.thumbDownClass == thumbsDown) {
-          card.thumbDownClass = emptyThumbsDown;
-        }
-
-        updateCards($scope.cards);
-      });
+        console.log("rateCard: submitted rating to server");
+      }).error(function (response) {
+        console.log("rateCard: failed to submit rating to server. Will cache and retry later");
+        updateRatings(id, rating);
+      });;
     }
 
     $scope.upRateCard = function (id) {
@@ -197,16 +206,20 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
       var url = generateRatingsUrl(id, rating);
       console.log("rateCard: Sending rating to API on URL '" + url + "'");
 
-      $http.put(url).success(function (response) {
-        if (card.thumbUpClass == emptyThumbsUp) {
-          card.thumbUpClass = thumbsUp;
-        }
-        else if (card.thumbUpClass == thumbsUp) {
-          card.thumbUpClass = emptyThumbsUp;
-        }
+      if (card.thumbUpClass == emptyThumbsUp) {
+        card.thumbUpClass = thumbsUp;
+      }
+      else if (card.thumbUpClass == thumbsUp) {
+        card.thumbUpClass = emptyThumbsUp;
+      }
+      updateCards($scope.cards);
 
-        updateCards($scope.cards);
-      });
+      $http.put(url).success(function (response) {
+        console.log("rateCard: submitted rating to server");
+      }).error(function (response) {
+        console.log("rateCard: failed to submit rating to server. Will cache and retry later");
+        updateRatings(id, rating);
+      });;
     }
 
     $scope.getCardById = function (contentId) {
@@ -224,8 +237,13 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
       return card;
     }
 
-    //clearCache();
-    $scope.getCardFromServer("74278BDA-B644-4520-8F0C-720EAF059935");
+    // Now everything is loaded, sync the cache up
+    syncCacheWithServer();
+
+    // Add some stub data
+    //$scope.getCardFromServer("74278BDA-B644-4520-8F0C-720EAF059935");
+
+    // Load the saved cards
     $scope.loadSavedCards();
 
     $scope.cardDestroyed = function (index) {
