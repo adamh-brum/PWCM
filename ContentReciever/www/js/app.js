@@ -56,6 +56,7 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
             console.log("Response recieved from server");
             console.log(JSON.stringify(response));
             response.forEach(function (element) {
+              console.log("Registering beacon " + element.name);
               var id = element.name;
               var uuid = element.id.toString();
               var region = new cordova.plugins.locationManager.BeaconRegion(id, uuid, 0, 0);
@@ -80,6 +81,8 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
 
   .controller('CardsCtrl', function ($scope, $http) {
     $scope.cards = [];
+
+    console.log("locading CardsCtrl");
 
     $scope.getSavedCards = function () {
       return readCache().cards;
@@ -114,11 +117,14 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
     $scope.getCardFromServer = function (beaconId) {
       console.log("getCardFromServer: Attempting to retrieve content for beacon UUID: " + beaconId);
 
-      var url = "http://localhost:5000/api/Content?locationId=" + beaconId;
+      var url = "http://localhost:5000/api/Schedule?locationId=" + beaconId;
       $http.get(url).success(function (response) {
-        //console.log("getCardFromServer: Response recieved from server")
+        console.log("getCardFromServer: Response recieved from server")
+        console.log(response); 
+        console.log("getCardFromServer: Response is " + JSON.stringify(response));
         response.forEach(function (element) {
-          //console.log("getCardFromServer: Response has description: " + element.contentShortDescription);
+          console.log("getCardFromServer: Parsing a response");
+          console.log("getCardFromServer: Response has description: " + element.contentShortDescription);
           $scope.addCard(element.content, element.contentShortDescription, element.RequestDateTime, element.locationName);
         }, this);
       });
@@ -130,6 +136,8 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
     $scope.cardDestroyed = function (index) {
       $scope.cards.splice(index, 1);
     };
+
+    console.log("CardsCntrl loaded");
   })
 
   .controller('CardCtrl', function ($scope, $ionicSwipeCardDelegate) {
