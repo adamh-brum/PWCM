@@ -82,19 +82,7 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
   $scope.cards = [];
 
   $scope.getSavedCards = function(){
-    if(typeof(Storage) != "undefined") {
-        var cardsString = localStorage.getItem("cards");
-        if(cardsString === null){
-          var cards = [];
-        }
-        else{
-          var cards = JSON.parse(cardsString);
-        }
-
-        return cards;
-    }
-
-    return null;
+    return readCache().cards;
   }
 
   $scope.loadSavedCards = function(){
@@ -143,7 +131,7 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
         });
 
         // Cards are added to array and storage now
-        localStorage.setItem("cards", JSON.stringify(cards));
+        updateCards(cards);
     } 
     else {
         alert("Sorry, your device does not support Web Storage...");
