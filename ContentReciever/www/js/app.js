@@ -81,8 +81,26 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
 
   .controller('CardsCtrl', function ($scope, $http) {
     $scope.cards = [];
+    $scope.settingsClass = "invisible";
+    $scope.messagesClass = "visible";
 
-    console.log("locading CardsCtrl");
+    console.log("loading CardsCtrl");
+
+    $scope.openMessages = function () {
+      console.log("Opening messages");
+      $scope.messagesClass = "visible";
+
+      // Close other tabs
+      $scope.settingsClass = "invisible";
+    }
+
+    $scope.openSettings = function () {
+      console.log("Opening settings");
+      $scope.settingsClass = "visible";
+
+      // Close other tabs
+      $scope.messagesClass = "invisible";
+    }
 
     $scope.getSavedCards = function () {
       console.log("getSavedCards is reading saved cards");
