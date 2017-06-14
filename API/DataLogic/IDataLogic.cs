@@ -8,6 +8,20 @@ namespace API.DataLogic
     public interface IDataLogic
     {
         /// <summary>
+        /// Gets all metadata with the given key
+        /// </summary>
+        /// <param name="key">Key </param>
+        /// <returns>Values that match the key</returns>
+        IEnumerable<string> GetMetadata(string key);
+
+        /// <summary>
+        /// Adds the metadata 
+        /// </summary>
+        /// <param name="key">Metadata key</param>
+        /// <param name="value">Value</param>
+        void AddMetadata(string key, string value);
+
+        /// <summary>
         /// Saves content to the DB
         /// </summary>
         /// <param name="title">The title for the content</param>

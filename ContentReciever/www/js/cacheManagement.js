@@ -9,9 +9,6 @@ readCache = function () {
       if (cache == null) {
         cache = { cards: [] };
       }
-      if (!cache.ratings) {
-        cache.ratings = [];
-      }
     }
 
     console.log("readCache: " + JSON.stringify(cache));

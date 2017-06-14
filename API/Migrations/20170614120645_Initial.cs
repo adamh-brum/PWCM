@@ -37,6 +37,20 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Metadata",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Key = table.Column<string>(nullable: false),
+                    Value = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Metadata", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Ratings",
                 columns: table => new
                 {
@@ -74,6 +88,9 @@ namespace API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Content");
+
+            migrationBuilder.DropTable(
+                name: "Metadata");
 
             migrationBuilder.DropTable(
                 name: "Ratings");

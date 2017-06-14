@@ -201,5 +201,31 @@ namespace API.DataLogic
                 db.SaveChanges();
             }
         }
+
+        public IEnumerable<string> GetMetadata(string key)
+        {
+            List<string> metadataValues = new List<string>();
+
+            using (var db = new ApplicationDbContext())
+            {
+                metadataValues = db.Metadata.Where(m => m.Key == key)?.Select(m => m.Value).ToList();
+            }
+
+            return metadataValues;
+        }
+
+        public void AddMetadata(string key, string value)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                db.Metadata.Add(new Metadata()
+                {
+                    Key = key,
+                    Value = value
+                });
+
+                db.SaveChanges();
+            }
+        }
     }
 }

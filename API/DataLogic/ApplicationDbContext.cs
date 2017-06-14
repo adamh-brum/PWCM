@@ -12,6 +12,8 @@ namespace API.DataLogic
         public DbSet<ScheduledItem> ScheduledItems { get; set; }
 
         public DbSet<Rating> Ratings { get; set; }
+        
+        public DbSet<Metadata> Metadata { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

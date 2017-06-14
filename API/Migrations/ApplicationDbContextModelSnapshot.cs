@@ -50,6 +50,22 @@ namespace API.Migrations
                     b.ToTable("Content");
                 });
 
+            modelBuilder.Entity("API.DataLogic.Models.Metadata", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Key")
+                        .IsRequired();
+
+                    b.Property<string>("Value")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Metadata");
+                });
+
             modelBuilder.Entity("API.DataLogic.Models.Rating", b =>
                 {
                     b.Property<int>("Id")
