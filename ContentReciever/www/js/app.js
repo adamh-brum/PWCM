@@ -83,8 +83,20 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
     $scope.cards = [];
     $scope.settingsClass = "invisible";
     $scope.messagesClass = "visible";
+    $scope.groups = [];
 
     console.log("loading CardsCtrl");
+
+    $scope.clickGroup = function (groupName) {
+      $scope.groups.forEach(function (group) {
+        if(group.class === "fa fa-check-circle"){
+          group.class = "fa fa-check-circle-o";
+        }
+        else {
+          group.class = "fa fa-check-circle";
+        }
+      });
+    }
 
     $scope.openMessages = function () {
       console.log("Opening messages");
@@ -102,20 +114,20 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
       $scope.messagesClass = "invisible";
     }
 
-    $scope.getSavedCards = function () {
-      console.log("getSavedCards is reading saved cards");
+    $scope.loadCache = function () {
+      console.log("loadCache: Loading cache from save to UI");
       var cache = readCache();
-
-      console.log("getSavedCards read the cache and found the cards: " + JSON.stringify(cache.cards));
-      return cache.cards;
-    }
-
-    $scope.loadSavedCards = function () {
-      // Retrieve the saved cards from device
-      var cards = $scope.getSavedCards();
+      var cards = cache.card;
       for (cardIndex in cards) {
         $scope.displayCard(cards[cardIndex]);
       }
+
+      console.log("loadCache: Cards loaded." + JSON.stringify($scope.cards));
+
+      // Retrieve saved groups
+      $scope.groups = cache.groups;
+      console.log("loadCache: Groups loaded." + JSON.stringify(cache.groups));
+      console.log("loadCache: UI variables populated from cache");
     }
 
     $scope.displayCard = function (card) {
@@ -256,13 +268,13 @@ angular.module('contentReceiver', ['ionic', 'ionic.contrib.ui.cards'])
     }
 
     // Now everything is loaded, sync the cache up
-    syncCacheWithServer();
+    syncCacheWithServer($http, $scope);
 
     // Add some stub data
     //$scope.getCardFromServer("74278BDA-B644-4520-8F0C-720EAF059935");
 
     // Load the saved cards
-    $scope.loadSavedCards();
+    $scope.loadCache();
 
     $scope.cardDestroyed = function (index) {
       $scope.cards.splice(index, 1);

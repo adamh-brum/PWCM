@@ -64,15 +64,17 @@
         </div>
       </div>
       <div id="settings" class="{{settingsClass}}">
-        <h3>Settings</h3>
-        <p>Change some settings here</p>
+        <h3>Subscriptions</h3>
+        <p>To ensure you only get relevant messages, you can subscribe and unsubscribe from any of the below message groups</p>
+        <div class="group" ng-repeat="group in groups">
+          <a href="#" on-tap="clickGroup(group.name)"><i class="{{group.class}}" aria-hidden="true"></i>{{group.name}}</a>
+        </div>
       </div>
     </div>
     <ion-tabs class="tabsContainer">
-      <ion-tab title="Messages" on-select="openMessages()">
+      <ion-tab title="<i class='fa fa-comments' aria-hidden='true'></i> Messages" on-select="openMessages()">
       </ion-tab>
-      <ion-tab title="Settings" on-select="openSettings()">
-        <!-- Tab 2 content -->
+      <ion-tab title="<i class='fa fa-list-ul' aria-hidden='true'></i> Subscriptions" on-select="openSettings()">
       </ion-tab>
     </ion-tabs>
   </ion-content>

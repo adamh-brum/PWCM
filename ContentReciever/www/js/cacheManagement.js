@@ -17,7 +17,7 @@ readCache = function () {
   return cache;
 }
 
-syncCacheWithServer = function () {
+syncCacheWithServer = function (http, scope) {
   var cache = readCache();
   if (cache.ratings) {
     // Try to send all ratings to server
@@ -25,7 +25,7 @@ syncCacheWithServer = function () {
     cache.ratings.forEach(function (rating) {
       var url = generateRatingsUrl(rating.contentId, rating.ratingValue);
 
-      $http.put(url).success(function (response) {
+      http.put(url).success(function (response) {
         console.log("syncCacheWithServer: submitted rating to server");
 
       }).error(function (response) {
@@ -37,8 +37,60 @@ syncCacheWithServer = function () {
 
     // Now save the new list into the cache
     cache.ratings = newRatingCache;
-    writeCache(cache);
   }
+
+  console.log("syncCacheWithServer: refreshing groups");
+  if (!cache.groups) {
+    cache.groups = [];
+  }
+
+  var groupsUrl = generateGroupsUrl();
+  http.get(groupsUrl).success(function (response) {
+    console.log("syncCacheWithServer: groups found from server." + JSON.stringify(response));
+    var groupsList = [];
+    if (response) {
+      // For each group in the group list, add it to cache
+      response.forEach(function (groupName) {
+        console.log("syncCacheWithServer: Processing group " + groupName);
+
+        // Check to see if the group already exists
+        var found = false;
+        console.log("syncCacheWithServer: checking existing cache to see if groups already exist");
+        cache.groups.forEach(function (existingGroup) {
+          if (existingGroup.name === groupName) {
+            found = true;
+            console.log("syncCacheWithServer: Group " + groupName + " already exists");
+            groupsList.unshift(angular.extend({}, { name: groupName, class: existingGroup.class }));
+          }
+        });
+
+        if (!found) {
+          // Before adding it, see if it was already added
+          console.log("syncCacheWithServer: Group " + groupName + " not found. Adding to cache.");
+          groupsList.unshift(angular.extend({}, { name: groupName, class: "fa fa-check-circle" }));
+        }
+      });
+    }
+
+    console.log("syncCacheWithServer: Group refreshed: " + JSON.stringify(groupsList));
+    cache.groups = groupsList;
+
+    console.log("syncCacheWithServer: Saving new cache: " + JSON.stringify(cache));
+
+    writeCache(cache);
+
+    console.log("syncCacheWithServer: Cache saved. Forcing UI refresh");
+
+    scope.loadCache();
+  });
+
+  writeCache(cache);
+
+  console.log("Cards saved. Forcing UI refresh");
+
+  scope.loadCache();
+
+  return true;
 }
 
 /* Ratings are only stored temporarily. They are stored if the server is 
@@ -85,9 +137,7 @@ updateCards = function (cards) {
 
   var cache = this.readCache();
   cache.cards = cards;
-  this.writeCache(cards);
-
-  console.log("Cards saved");
+  this.writeCache(cache);
 }
 
 writeCache = function (cache) {

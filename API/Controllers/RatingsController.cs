@@ -12,11 +12,11 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class RatingsController : Controller
     {
-        private IDataLogic dataLogic;
+        private IRatingsDataLogic dataLogic;
 
         public RatingsController()
         {
-            this.dataLogic = DataGenerator.GenerateSqliteData();
+            this.dataLogic = new SqliteRatingsDataLogic();;
         }
 
         // GET api/values

@@ -12,11 +12,20 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class ContentController : Controller
     {
-        private IDataLogic dataLogic;
+        /// <summary>
+        /// Data logic for accessing the content
+        /// </summary>
+        private IContentDataLogic contentDataLogic;
+
+        /// <summary>
+        /// The data logic to access content schedule
+        /// </summary>
+        private IScheduleDataLogic scheduleDataLogic;
 
         public ContentController()
         {
-            this.dataLogic = DataGenerator.GenerateSqliteData();
+            this.contentDataLogic = new SqliteContentDataLogic();
+            this.scheduleDataLogic = new SqliteScheduleDataLogic();
         }
 
         // GET api/values
@@ -32,7 +41,7 @@ namespace API.Controllers
             }
 
             DateTime requestTime = DateTime.Now;
-            var content = this.dataLogic.GetScheduledContent(beaconId, requestTime);
+            var content = this.scheduleDataLogic.GetScheduledContent(beaconId, requestTime);
             return content.Content.Select(c => new ContentModel()
             {
                 Id = c.Id,
@@ -48,7 +57,7 @@ namespace API.Controllers
         public void Post(string shortDescription, string content, string[] locationIds)
         {
             // Create content
-            int contentId = this.dataLogic.AddContent(shortDescription, content);
+            int contentId = this.contentDataLogic.AddContent(shortDescription, content);
 
             // If any location Id's provided
             if (locationIds != null)
@@ -69,20 +78,8 @@ namespace API.Controllers
                     }
                 }
 
-                this.dataLogic.ScheduleContent(contentId, beacons.ToArray(), DateTime.Now, DateTime.Now.AddDays(5));
+                this.scheduleDataLogic.ScheduleContent(contentId, beacons.ToArray(), DateTime.Now, DateTime.Now.AddDays(5));
             }
         }
-
-        // // PUT api/values/5
-        // [HttpPut("{id}")]
-        // public void Put(int id, [FromBody]string value)
-        // {
-        // }
-
-        // // DELETE api/values/5
-        // [HttpDelete("{id}")]
-        // public void Delete(int id)
-        // {
-        // }
     }
 }

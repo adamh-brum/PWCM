@@ -12,11 +12,11 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class MetadataController : Controller
     {
-        private IDataLogic dataLogic;
+        private IMetadataDataLogic dataLogic;
 
         public MetadataController()
         {
-            this.dataLogic = DataGenerator.GenerateSqliteData();
+            this.dataLogic = new SqliteMetadataDataLogic();
         }
 
         // GET api/values
@@ -38,16 +38,35 @@ namespace API.Controllers
             this.dataLogic.AddMetadata(key, value);
         }
 
-        // // PUT api/values/5
-        // [HttpPut("{id}")]
-        // public void Put(int id, [FromBody]string value)
-        // {
-        // }
+        /// <summary>
+        /// Deletes metadata item(s) that match the given key / value
+        /// </summary>
+        /// <param name="key">Key</param>
+        /// <param name="value">Value</param>
+        [HttpDelete("")]
+        public void Delete(string key, string value)
+        {
+            if(string.IsNullOrEmpty(key) || string.IsNullOrEmpty(value))
+            {
+                throw new ArgumentNullException();
+            }
 
-        // // DELETE api/values/5
-        // [HttpDelete("{id}")]
-        // public void Delete(int id)
-        // {
-        // }
+            this.dataLogic.DeleteMetadata(key, value);
+        }
+
+        /// <summary>
+        /// Deletes metadata item(s) that match the given key 
+        /// </summary>
+        /// <param name="key">Key</param>
+        [HttpDelete("")]
+        public void Delete(string key)
+        {
+            if(string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException();
+            }
+
+            this.dataLogic.DeleteMetadata(key, null);
+        }
     }
 }

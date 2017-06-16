@@ -12,11 +12,11 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class BeaconController : Controller
     {
-        private IDataLogic dataLogic;
+        private IBeaconDataLogic dataLogic;
 
         public BeaconController()
         {
-            this.dataLogic = DataGenerator.GenerateSqliteData();
+            this.dataLogic = new SqliteBeaconDataLogic();;
         }
 
         // GET api/values
