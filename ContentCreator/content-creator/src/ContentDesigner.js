@@ -98,9 +98,7 @@ class ContentDesigner extends React.Component {
 
     // Submit to API
     let html = stateToHTML(this.state.editorState.getCurrentContent());
-    alert(html);
     var url = "http://localhost:5000/api/Content?shortDescription=" + this.state.notification + "&content=" + html + "&locationIds=" + locationIds;
-    alert(url);
     axios.post(url).then(res => {
       //const posts = res.data.data.children.map(obj => obj.data);
       //this.setState({ posts });

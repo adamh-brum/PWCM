@@ -100,15 +100,51 @@
 }
 
 .searchContentPane {
-  max-width: 200px;
+  max-width: 400px;
+}
+
+.contentPreviewList {
+  list-style: none;
+}
+
+.contentSearchContainer{
+  margin: 10px;
 }
 
 .contentPreviewBox {
+  border: solid 2px grey;
+  border-radius: 5px;
+  padding: 10px;
+  margin-left: -30px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
 
+.contentPreviewBox:hover{
+  border-radius: 5px;
+  border: solid 2px green;
+  color: green;
+  cursor: pointer;
 }
 
 .beaconSelectionPane {
 
+}
+
+.formBottomBar{
+  padding-left: 5px;
+  padding-bottom: 10px;
+}
+
+.formBottomBar button{
+  margin: 5px;
+}
+
+.selected{
+  border-radius: 5px;
+  border: solid 2px green;
+  color: green;
+  cursor: pointer;
 }
 
 @keyframes App-logo-spin {
