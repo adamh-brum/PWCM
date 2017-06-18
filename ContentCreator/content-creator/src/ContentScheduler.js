@@ -25,6 +25,7 @@ const ContentSchedulerComponent = class ContentScheduler extends React.Component
 
         this.contentSearchTextChanged = this.contentSearchTextChanged.bind(this);
         this.incrementLoadingState = this.incrementLoadingState.bind(this);
+        this.revealListItem = this.revealListItem.bind(this);
 
         this.getContent();
         this.getBeacons();
@@ -87,7 +88,16 @@ const ContentSchedulerComponent = class ContentScheduler extends React.Component
             // Unselect all others
             var listItems = document.getElementsByTagName("li");
             for (var i = 0; i < listItems.length; i++) {
-                listItems[i].className = "contentPreviewBox";
+                var item = listItems[i];
+                if(item.className.indexOf('selected') > -1){
+                    // deselect
+                    var newClassName = 'contentPreviewBox';
+                    if(item.className.indexOf('hidden') > -1){
+                        newClassName = newClassName + " hidden";
+                    }
+
+                    item.className = newClassName;
+                }
             }
 
             listItem.className = listItem.className + " selected";
@@ -95,7 +105,37 @@ const ContentSchedulerComponent = class ContentScheduler extends React.Component
     }
 
     contentSearchTextChanged(event) {
-        this.setState({ contentSearchText: event.target.value });
+        var searchText = event.target.value;
+        this.setState({ contentSearchText: searchText });
+
+        var listItems = document.getElementsByTagName("li");
+
+        // If search text is "", reveal all
+        if (searchText === "") {
+            for (var i = 0; i < listItems.length; i++) {
+                this.revealListItem(listItems[i]);
+            }
+        }
+        else {
+            for (var i = 0; i < listItems.length; i++) {
+                // Run search to see if this should be displayed
+                var listItem = listItems[i];
+                if (listItem.innerHTML.toUpperCase().indexOf(searchText.toUpperCase()) > -1) {
+                    this.revealListItem(listItem);
+                }
+                else {
+                    // Hide
+                    listItem.className = listItem.className + " hidden";
+                }
+            }
+        }
+    }
+
+    revealListItem(listItem) {
+        if (listItem.className.indexOf("hidden") > -1) {
+            // reveal
+            listItem.className = listItem.className.substr(0, listItem.className.length - 6);
+        }
     }
 
     cancelClicked(event) {
