@@ -6,6 +6,7 @@ using API.Controllers.Models;
 using API.DataLogic.Models;
 using API.DataLogic;
 using Microsoft.AspNetCore.Mvc;
+using API.DataLogic.ViewModels;
 
 namespace API.Controllers
 {
@@ -29,57 +30,47 @@ namespace API.Controllers
         }
 
         // GET api/values
-        [HttpGet]
-        public IEnumerable<ContentModel> Get(string locationId)
+        [HttpGet("{contentId}")]
+        public Content Get([FromQuery] int contentId)
         {
-            bool parsed = false;
-            Guid beaconId = Guid.Empty;
-            parsed = Guid.TryParse(locationId, out beaconId);
-            if (!parsed)
-            {
-                return null;
-            }
+            return this.contentDataLogic.GetContent(contentId);
+        }
 
-            DateTime requestTime = DateTime.Now;
-            var content = this.scheduleDataLogic.GetScheduledContent(beaconId, requestTime);
-            return content.Content.Select(c => new ContentModel()
-            {
-                Id = c.Id,
-                LocationName = content.Location,
-                RequestDateTime = requestTime,
-                ContentShortDescription = c.Title,
-                Content = c.Value
-            });
+        // GET api/values
+        [HttpGet]
+        [Route("All")]
+        public IEnumerable<Content> Get()
+        {
+            var content = this.contentDataLogic.GetContent().ToList();
+            return content;
         }
 
         // POST api/values
         [HttpPost]
-        public void Post(string shortDescription, string content, string[] locationIds)
+        public SubmissionStatus Post(string shortDescription, string content)
         {
             // Create content
-            int contentId = this.contentDataLogic.AddContent(shortDescription, content);
-
-            // If any location Id's provided
-            if (locationIds != null)
+            SubmissionStatus status = new SubmissionStatus()
             {
-                List<Guid> beacons = new List<Guid>();
-                foreach (var locationId in locationIds)
-                {
-                    bool parsed = false;
-                    Guid beaconId = Guid.Empty;
-                    parsed = Guid.TryParse(locationId, out beaconId);
-                    if (parsed)
-                    {
-                        beacons.Add(beaconId);
-                    }
-                    else
-                    {
-                        // Add validation error
-                    }
-                }
+                StatusCode = SubmissionStatusCode.Success
+            };
 
-                this.scheduleDataLogic.ScheduleContent(contentId, beacons.ToArray(), DateTime.Now, DateTime.Now.AddDays(5));
+            try
+            {
+                int contentId = this.contentDataLogic.AddContent(shortDescription, content);
+                if (contentId == 0)
+                {
+                    status.StatusCode = SubmissionStatusCode.Failure;
+                    status.Messages.Add("Write to database failed for new content");
+                }
             }
+            catch
+            {
+                status.StatusCode = SubmissionStatusCode.Failure;
+                status.Messages.Add("Critical error.");
+            }
+
+            return status;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace API.DataLogic
         {
             using (var db = new ApplicationDbContext())
             {
-                return db.Ratings;
+                return db.Ratings.ToList();
             }
         }
 

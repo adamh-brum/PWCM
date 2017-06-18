@@ -6,6 +6,7 @@ using API.Controllers.Models;
 using API.DataLogic.Models;
 using API.DataLogic;
 using Microsoft.AspNetCore.Mvc;
+using API.DataLogic.ViewModels;
 
 namespace API.Controllers
 {
@@ -19,8 +20,12 @@ namespace API.Controllers
             this.dataLogic = new SqliteScheduleDataLogic();
         }
 
-        // GET api/values
-        [HttpGet]
+        /// <summary>
+        /// Determines every content for the specified location at the current time of day
+        /// </summary>
+        /// <param name="locationId">Beacon UUID</param>
+        /// <returns>Content at the given location</returns>
+        [HttpGet("{locationId}")]
         public IEnumerable<ContentModel> Get(string locationId)
         {
             bool parsed = false;
@@ -41,6 +46,27 @@ namespace API.Controllers
                 ContentShortDescription = c.Title,
                 Content = c.Value
             });
+        }
+
+        /// <summary>
+        /// Returns the availability for every single beacon, based on the schedule, from today onwards
+        /// Historical bookings are filtered out to reduce response size
+        /// </summary>
+        /// <returns>All future bookings and availability of beacons</returns>
+        [HttpGet]
+        public IEnumerable<BeaconAvailability> Get()
+        {
+            return this.dataLogic.GetFutureScheduledContent();
+        }
+
+        /// <summary>
+        /// Shcedules content onto the system using the bookings
+        /// </summary>
+        /// <param name="bookings">The bookings</param>
+        [HttpPost]
+        public SubmissionStatus Post(IEnumerable<BeaconBookingModel> bookings)
+        {
+            return this.dataLogic.ScheduleContent(bookings);
         }
     }
 }

@@ -9,6 +9,7 @@ import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
 import FontAwesome from 'react-fontawesome';
 
+import ContentScheduler from './ContentScheduler.js';
 import ContentDesigner from './ContentDesigner.js';
 import AddBeaconComponent from './AddBeacon.js';
 
@@ -27,6 +28,7 @@ const HomeComponent = class HomeComponent extends React.Component {
         this.state = { value: '' };
         this.navigateToAddBeacon = this.navigateToAddBeacon.bind(this);
         this.navigateToContentCreator = this.navigateToContentCreator.bind(this);
+        this.navigateToContentScheduler = this.navigateToContentScheduler.bind(this);
     }
 
     navigateToAddBeacon(event) {
@@ -41,6 +43,14 @@ const HomeComponent = class HomeComponent extends React.Component {
         ReactDOM.render(
             <MuiThemeProvider>
                 <ContentDesigner />
+            </MuiThemeProvider>,
+            document.getElementById('root'));
+    }
+
+    navigateToContentScheduler(event) {
+        ReactDOM.render(
+            <MuiThemeProvider>
+                <ContentScheduler />
             </MuiThemeProvider>,
             document.getElementById('root'));
     }
@@ -116,7 +126,7 @@ const HomeComponent = class HomeComponent extends React.Component {
                             </Typography>
                         </CardContent>
                         <CardActions>
-                            <Button compact primary onClick={this.navigateToContentCreator}>Schedule Content</Button>
+                            <Button compact primary onClick={this.navigateToContentScheduler}>Schedule Content</Button>
                         </CardActions>
                     </Card>
                     <Card className="Tile">

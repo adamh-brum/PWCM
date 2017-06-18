@@ -26,6 +26,12 @@ namespace API.DataLogic
         Content GetContent(int contentId);
 
         /// <summary>
+        /// Returns all content
+        /// </summary>
+        /// <returns>All content</returns>
+        IEnumerable<Content> GetContent();
+
+        /// <summary>
         /// Deletes the content with the given ID
         /// </summary>
         /// <param name="contentId">Content ID</param>

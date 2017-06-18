@@ -59,5 +59,17 @@ namespace API.DataLogic
                 return db.Content.FirstOrDefault(c => c.Id == contentId);
             }
         }
+
+        /// <summary>
+        /// Returns all content
+        /// </summary>
+        /// <returns>All content</returns>
+        public IEnumerable<Content> GetContent()
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                return db.Content.ToList();
+            }
+        }
     }
 }
