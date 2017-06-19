@@ -26,9 +26,43 @@ const ContentSchedulerComponent = class ContentScheduler extends React.Component
         this.contentSearchTextChanged = this.contentSearchTextChanged.bind(this);
         this.incrementLoadingState = this.incrementLoadingState.bind(this);
         this.revealListItem = this.revealListItem.bind(this);
+        this.loadScheduler = this.loadScheduler.bind(this);
 
         this.getContent();
         this.getBeacons();
+    }
+
+    loadScheduler() {
+        var tableStart = "<table class='schedulerTable'>";
+        var tableEnd = "</table>";
+        var rowStart = "<tr>";
+        var rowEnd = "</tr>";
+        var colStart = "<td>";
+        var colEnd = "</td>";
+
+        var tableString = tableStart;
+        
+        // add headings based on dates
+
+        this.state.beaconsAndAvailability.forEach(function (beacon) {
+            var row = "<tr id='" + beacon.beaconId + "'>" + colStart + beacon.location + colEnd;
+
+            // Now render availability
+
+
+            // End row
+            row = row + rowEnd;
+
+            // Add row to table
+            tableString = tableString + row;
+        });
+
+        // End table string
+        tableString = tableString + tableEnd;
+
+        // Set table
+        var table = document.getElementById('scheduler');
+        table.innerHTML = tableString;
     }
 
     incrementLoadingState() {
@@ -69,7 +103,12 @@ const ContentSchedulerComponent = class ContentScheduler extends React.Component
             console.log('beacons recieved');
             this.setState({ beaconsAndAvailability: res.data });
 
+            // Now the beacons have joined the party we can load the scheduler
+            this.loadScheduler();
+
             this.incrementLoadingState();
+
+
         });
     }
 
@@ -89,10 +128,10 @@ const ContentSchedulerComponent = class ContentScheduler extends React.Component
             var listItems = document.getElementsByTagName("li");
             for (var i = 0; i < listItems.length; i++) {
                 var item = listItems[i];
-                if(item.className.indexOf('selected') > -1){
+                if (item.className.indexOf('selected') > -1) {
                     // deselect
                     var newClassName = 'contentPreviewBox';
-                    if(item.className.indexOf('hidden') > -1){
+                    if (item.className.indexOf('hidden') > -1) {
                         newClassName = newClassName + " hidden";
                     }
 
@@ -193,9 +232,8 @@ const ContentSchedulerComponent = class ContentScheduler extends React.Component
                                                 }
                                             </ul>
                                         </div>
-                                    </div>
-                                    <div id="submitForm">
-
+                                        <div id="scheduler">
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="formBottomBar">

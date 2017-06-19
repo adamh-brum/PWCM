@@ -1,4 +1,4 @@
-namespace  API.DataLogic.Models
+namespace API.DataLogic.Models
 {
     using System;
 
@@ -12,5 +12,7 @@ namespace  API.DataLogic.Models
         public DateTime End { get; set; }
 
         public string Description { get; set; }
+
+        public int ContentId { get; set; }
     }
 }

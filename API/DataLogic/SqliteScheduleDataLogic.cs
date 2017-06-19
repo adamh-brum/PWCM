@@ -84,7 +84,8 @@ namespace API.DataLogic
                     {
                         Start = item.StartDateTime,
                         End = item.EndDateTime,
-                        Description = content.Title
+                        Description = content.Title,
+                        ContentId = item.ContentId
                     });
                 }
             }

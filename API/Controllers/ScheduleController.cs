@@ -54,9 +54,12 @@ namespace API.Controllers
         /// </summary>
         /// <returns>All future bookings and availability of beacons</returns>
         [HttpGet]
-        public IEnumerable<BeaconAvailability> Get()
+        public IEnumerable<BeaconSchedule> Get()
         {
-            return this.dataLogic.GetFutureScheduledContent();
+            var schedule = new List<BeaconSchedule>();
+            var availability = this.dataLogic.GetFutureScheduledContent();
+
+            return schedule;
         }
 
         /// <summary>

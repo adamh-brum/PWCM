@@ -1,0 +1,4 @@
+/Users/adam/Documents/NearbyContent/APITest/bin/Debug/netcoreapp1.1/APITest.deps.json
+/Users/adam/Documents/NearbyContent/APITest/bin/Debug/netcoreapp1.1/APITest.runtimeconfig.json
+/Users/adam/Documents/NearbyContent/APITest/bin/Debug/netcoreapp1.1/APITest.runtimeconfig.dev.json
+/Users/adam/Documents/NearbyContent/APITest/obj/Debug/netcoreapp1.1/APITest.AssemblyInfo.cs
